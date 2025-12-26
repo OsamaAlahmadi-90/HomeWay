@@ -1,6 +1,6 @@
 package com.example.homeway.Service;
 
-import com.example.homeway.API.APIException;
+import com.example.homeway.API.ApiException;
 import com.example.homeway.DTO.In.CompanyDTOIn;
 import com.example.homeway.DTO.In.CustomerDTOIn;
 import com.example.homeway.DTO.In.WorkerDTOIn;
@@ -25,10 +25,10 @@ public class AuthService {
     public void registerCustomer(CustomerDTOIn dto) {
 
         if (userRepository.findUserByUsername(dto.getUsername()) != null) {
-            throw new APIException("Username already exists");
+            throw new ApiException("Username already exists");
         }
         if (userRepository.findUserByEmail(dto.getEmail()) != null) {
-            throw new APIException("Email already exists");
+            throw new ApiException("Email already exists");
         }
 
         User user = new User();
@@ -54,10 +54,10 @@ public class AuthService {
 
     public void registerCompany(CompanyDTOIn dto) {
         if (userRepository.findUserByUsername(dto.getUsername()) != null) {
-            throw new APIException("Username already exists");
+            throw new ApiException("Username already exists");
         }
         if (userRepository.findUserByEmail(dto.getEmail()) != null) {
-            throw new APIException("Email already exists");
+            throw new ApiException("Email already exists");
         }
 
         User user = new User();
@@ -85,15 +85,15 @@ public class AuthService {
     public void registerWorker(WorkerDTOIn dto) {
 
         if (userRepository.findUserByUsername(dto.getUsername()) != null) {
-            throw new APIException("Username already exists");
+            throw new ApiException("Username already exists");
         }
         if (userRepository.findUserByEmail(dto.getEmail()) != null) {
-            throw new APIException("Email already exists");
+            throw new ApiException("Email already exists");
         }
 
         Company company = companyRepository.findCompanyById(dto.getCompanyId());
         if (company == null) {
-            throw new APIException("Company not found with id: " + dto.getCompanyId());
+            throw new ApiException("Company not found with id: " + dto.getCompanyId());
         }
 
         User user = new User();

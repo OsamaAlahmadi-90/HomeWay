@@ -25,16 +25,8 @@ public class Configuration {
                         sm.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> auth
 
-//                        .requestMatchers("/api/v1/auth/register/worker", "/api/v1/auth/register/company","/api/v1/auth/register/customer").permitAll()
-//
-//                        .requestMatchers("/api/v1/user/get", "").hasAuthority("ADMIN")
-//                        .requestMatchers("").permitAll().hasAuthority("Company")
-//                        .requestMatchers("").permitAll().hasAuthority("Company")
-//                        .requestMatchers("").permitAll()
-//
-//                        .requestMatchers("/api/v1/account/create", "/api/v1/account/my-accounts", "/api/v1/account/deposit", "/api/v1/account/withdraw", "/api/v1/account/transfer").permitAll()
-//authenticated()
-                                .anyRequest().permitAll()
+                        .requestMatchers("/api/v1/auth/**").permitAll()
+                        .anyRequest().permitAll()
                 )
                 .logout(logout -> logout
                         .logoutUrl("/api/v1/auth/logout")

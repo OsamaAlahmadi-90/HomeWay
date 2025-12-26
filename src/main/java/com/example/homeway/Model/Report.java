@@ -20,13 +20,13 @@ public class Report {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(columnDefinition = "varchar(100) not null")
+    @Column(columnDefinition = "varchar(100) ")
     private String findings;
 
-    @Column(columnDefinition = "varchar(100) not null")
+    @Column(columnDefinition = "varchar(100) ")
     private String recommendations;
 
-    @Column(columnDefinition = "varchar(100) not null")
+    @Column(columnDefinition = "varchar(100)")
     private String imageURL;
 
     @Column(columnDefinition = "datetime default current_timestamp")

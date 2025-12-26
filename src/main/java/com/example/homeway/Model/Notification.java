@@ -23,7 +23,7 @@ public class Notification {
     @Column(columnDefinition = "varchar(150) not null")
     private String title;
 
-    @Column(columnDefinition = "text not null")
+    @Column(columnDefinition = "varchar(150) not null")
     private String message;
 
     @Column(columnDefinition = "datetime not null")

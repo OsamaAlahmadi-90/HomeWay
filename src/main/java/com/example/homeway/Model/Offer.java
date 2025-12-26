@@ -24,14 +24,14 @@ public class Offer {
     @Column(columnDefinition = "double not null")
     private Double price;
 
-    @Column(columnDefinition = "varchar(20) not null")
+    @Column(columnDefinition = "varchar(20) ")
     private String status;
 
     @Column(columnDefinition = "datetime default current_timestamp")
     private LocalDateTime createdAt;
 
     @OneToOne
-    @JoinColumn(name = "request_id")
+    @JoinColumn(name = "request_id", referencedColumnName = "id")
     @JsonIgnore
     private Request request;
 

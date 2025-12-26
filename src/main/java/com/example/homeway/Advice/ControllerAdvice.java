@@ -1,7 +1,7 @@
 package com.example.homeway.Advice;
 
-import com.example.homeway.API.APIException;
-import com.example.homeway.API.APIResponse;
+import com.example.homeway.API.ApiException;
+import com.example.homeway.API.ApiResponse;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
@@ -17,57 +17,57 @@ import java.sql.SQLIntegrityConstraintViolationException;
 
 @RestControllerAdvice
 public class ControllerAdvice {
-    @ExceptionHandler(value = APIException.class)
-    public ResponseEntity<?> APIException(APIException apiExecption) {
+    @ExceptionHandler(value = ApiException.class)
+    public ResponseEntity<?> APIException(ApiException apiExecption) {
         String message = apiExecption.getMessage();
-        return ResponseEntity.status(400).body(new APIResponse(message));
+        return ResponseEntity.status(400).body(new ApiResponse(message));
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<?> ValidException(MethodArgumentNotValidException e){
         String error = e.getFieldError().getDefaultMessage();
-        return ResponseEntity.status(400).body(new APIResponse(error));
+        return ResponseEntity.status(400).body(new ApiResponse(error));
     }
 
     @ExceptionHandler(value = HttpMessageNotReadableException.class)
     public ResponseEntity<?> HttpMessageNotReadable(){
-        return ResponseEntity.status(400).body(new APIResponse("your input not readable"));
+        return ResponseEntity.status(400).body(new ApiResponse("your input not readable"));
     }
 
     @ExceptionHandler(value = NoResourceFoundException.class)
     public ResponseEntity<?> urlError(){
-        return ResponseEntity.status(404).body(new APIResponse("wrong Url"));
+        return ResponseEntity.status(404).body(new ApiResponse("wrong Url"));
     }
 
     @ExceptionHandler(value = SQLIntegrityConstraintViolationException.class)
 
-    public ResponseEntity<?> SQLError(APIException apiException){
-        return ResponseEntity.status(400).body(new APIResponse(apiException.getMessage()));
+    public ResponseEntity<?> SQLError(ApiException apiException){
+        return ResponseEntity.status(400).body(new ApiResponse(apiException.getMessage()));
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<?> handleDataIntegrityViolation(DataIntegrityViolationException duplicateEntry) {
-        return ResponseEntity.status(400).body(new APIResponse(duplicateEntry.getMostSpecificCause().getMessage()));
+        return ResponseEntity.status(400).body(new ApiResponse(duplicateEntry.getMostSpecificCause().getMessage()));
     }
 
     @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
     public ResponseEntity<?> TypeMismatchError(MethodArgumentTypeMismatchException mismatchError){
-        return ResponseEntity.status(400).body(new APIResponse(("wrong value type entered did you do a word in place of a number?")));
+        return ResponseEntity.status(400).body(new ApiResponse(("wrong value type entered did you do a word in place of a number?")));
     }
 
     @ExceptionHandler(value = ConstraintViolationException.class)
     public ResponseEntity<?> ConstraintViolationException(ConstraintViolationException e){
         String error = e.getConstraintViolations().iterator().next().getMessage();
-        return ResponseEntity.status(400).body(new APIResponse(error));
+        return ResponseEntity.status(400).body(new ApiResponse(error));
     }
 
     @ExceptionHandler(DuplicateKeyException.class)
     public ResponseEntity<?> DuplicateKeyException(DuplicateKeyException duplicateEntry) {
-        return ResponseEntity.status(400).body(new APIResponse("the email or username is already taken please choose another"));
+        return ResponseEntity.status(400).body(new ApiResponse("the email or username is already taken please choose another"));
     }
 
     @ExceptionHandler(value = NullPointerException.class)
     public ResponseEntity<?> NullPointerException(NullPointerException e){
-        return ResponseEntity.status(400).body(new APIResponse(e.getMessage()));
+        return ResponseEntity.status(400).body(new ApiResponse(e.getMessage()));
     }
 }

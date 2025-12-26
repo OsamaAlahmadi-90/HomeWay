@@ -1,6 +1,6 @@
 package com.example.homeway.Service;
 
-import com.example.homeway.API.APIException;
+import com.example.homeway.API.ApiException;
 import com.example.homeway.Model.User;
 import com.example.homeway.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class MyUserDetailsService implements UserDetailsService {
         User user = userRepository.findUserByUsername(username);
 
         if (user == null) {
-            throw new APIException("Username not found");
+            throw new ApiException("Username not found");
         }
         return user;
     }
