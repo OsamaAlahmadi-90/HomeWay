@@ -1,5 +1,8 @@
 package com.example.homeway.Service;
 
+import com.example.homeway.DTO.In.CompanyDTOIn;
+import com.example.homeway.DTO.In.CompanyStatusDTOIn;
+import com.example.homeway.DTO.Out.CompanyDTOOut;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,6 +13,7 @@ import com.example.homeway.Repository.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 @Service
 @RequiredArgsConstructor
@@ -21,18 +25,46 @@ public class CompanyService {
     private final OfferRepository offerRepository;
     private final NotificationRepository notificationRepository;
 
-    public List<Company> getAllCompanies() {
-        return companyRepository.findAll();
+
+    public List<CompanyDTOOut> getAllCompanies() {
+        List<CompanyDTOOut> outs = new ArrayList<>();
+
+        for (Company c : companyRepository.findAll()) {
+            outs.add(convertToDTO(c));
+        }
+        return outs;
     }
 
-    public Company getCompanyById(Integer companyId) {
+    public CompanyDTOOut getCompanyById(Integer companyId) {
         Company company = companyRepository.findCompanyById(companyId);
         if (company == null) throw new ApiException("company not found with id: " + companyId);
-        return company;
+
+        return convertToDTO(company);
     }
 
-    public List<Company> getCompaniesByRole(String role) {
-        return companyRepository.findAllByUser_Role(role);
+    public List<CompanyDTOOut> getCompaniesByRole(String role) {
+        List<CompanyDTOOut> outs = new ArrayList<>();
+
+        for (Company c : companyRepository.findAllByUser_Role(role)) {
+            outs.add(convertToDTO(c));
+        }
+
+        return outs;
+    }
+
+    public void updateCompanyStatus(Integer companyId, CompanyStatusDTOIn dto) {
+        Company company = companyRepository.findCompanyById(companyId);
+        if (company == null) throw new ApiException("company not found with id: " + companyId);
+
+        company.setStatus(dto.getStatus());
+        companyRepository.save(company);
+    }
+
+    public void deleteCompany(Integer companyId) {
+        Company company = companyRepository.findCompanyById(companyId);
+        if (company == null) throw new ApiException("company not found with id: " + companyId);
+
+        companyRepository.delete(company);
     }
 
     public void approveInspectionRequest(User user, Integer requestId, Double price) {
@@ -262,8 +294,7 @@ public class CompanyService {
         request.setStatus("approved");
         requestRepository.save(request);
 
-        createCustomerNotification(
-                request.getCustomer(), "approved request", "Your moving request was approved. Please accept/reject the offer.");
+        createCustomerNotification(request.getCustomer(), "approved request", "Your moving request was approved. Please accept/reject the offer.");
     }
 
 
@@ -308,6 +339,7 @@ public class CompanyService {
             throw new ApiException("offer is not paid yet");
         }
 
+        //CHECK IF HE IS ACTIVE
         //assign worker and vehicle
         Worker worker = workerRepository.findAvailableMovingWorker(company.getId());
         if (worker == null) {
@@ -798,6 +830,16 @@ public class CompanyService {
         notification.setCustomer(customer);
 
         notificationRepository.save(notification);
+    }
+
+    public CompanyDTOOut convertToDTO(Company company) {
+        User u = company.getUser();
+        return new CompanyDTOOut(
+                company.getId(), company.getStatus(),
+                (u != null ? u.getName() : null), (u != null ? u.getEmail() : null),
+                (u != null ? u.getPhone() : null), (u != null ? u.getCountry() : null),
+                (u != null ? u.getCity() : null), (u != null ? u.getRole() : null)
+        );
     }
 
 }

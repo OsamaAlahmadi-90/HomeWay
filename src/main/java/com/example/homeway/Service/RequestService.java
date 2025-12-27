@@ -2,6 +2,7 @@ package com.example.homeway.Service;
 
 import com.example.homeway.API.ApiException;
 import com.example.homeway.DTO.In.RequestDTOIn;
+import com.example.homeway.DTO.Out.RequestDTOOut;
 import com.example.homeway.Model.*;
 import com.example.homeway.Repository.CompanyRepository;
 import com.example.homeway.Repository.PropertyRepository;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,12 +23,71 @@ public class RequestService {
     private final PropertyRepository propertyRepository;
     private final CompanyRepository companyRepository;
 
-    public List<Request> getAllRequests() {
-        return requestRepository.findAll();
+    // admin
+    public List<RequestDTOOut> getAllRequests() {
+        List<RequestDTOOut> outs = new ArrayList<>();
+
+        for (Request r : requestRepository.findAll()) {
+            outs.add(convertToDTO(r));
+        }
+
+        return outs;
     }
 
-    public List<Request> getAllRequestsByCompany(Integer companyId) {
-        return requestRepository.findAllByCompany_Id(companyId);
+    //endpoint1 - admin - company
+    public RequestDTOOut getRequestById(Integer requestId) {
+        Request r = requestRepository.findRequestById(requestId);
+        if (r == null) throw new ApiException("request not found with id: " + requestId);
+
+        return convertToDTO(r);
+    }
+
+    //endpoint2 - admin - company?
+    public List<RequestDTOOut> getRequestsByCompany(Integer companyId) {
+        List<RequestDTOOut> outs = new ArrayList<>();
+
+        for (Request r : requestRepository.findAllByCompany_Id(companyId)) {
+            outs.add(convertToDTO(r));
+        }
+
+        return outs;
+    }
+
+    //endpoint3 - admin - company
+    public List<RequestDTOOut> getRequestsByCustomer(Integer customerId) {
+        List<RequestDTOOut> outs = new ArrayList<>();
+
+        for (Request r : requestRepository.findAllByCustomer_Id(customerId)) {
+            outs.add(convertToDTO(r));
+        }
+
+        return outs;
+    }
+
+    public void updateRequest(Integer requestId, RequestDTOIn dto) {
+        Request request = requestRepository.findRequestById(requestId);
+        if (request == null) throw new ApiException("request not found with id: " + requestId);
+
+        Company company = companyRepository.findCompanyById(dto.getCompanyId());
+        if (company == null) throw new ApiException("company not found with id: " + dto.getCompanyId());
+
+        Property property = propertyRepository.findPropertyById(dto.getPropertyId());
+        if (property == null) throw new ApiException("property not found with id: " + dto.getPropertyId());
+
+        request.setCompany(company);
+        request.setProperty(property);
+
+        request.setTimeWindow(dto.getTimeWindow());
+        request.setDescription(dto.getDescription());
+
+        requestRepository.save(request);
+    }
+
+    public void deleteRequest(Integer requestId) {
+        Request request = requestRepository.findRequestById(requestId);
+        if (request == null) throw new ApiException("request not found with id: " + requestId);
+
+        requestRepository.delete(request);
     }
 
     @Transactional
@@ -201,5 +262,19 @@ public class RequestService {
 
         request.setCompany(company);
         requestRepository.save(request);
+    }
+
+    public RequestDTOOut convertToDTO(Request r) {
+        return new RequestDTOOut(
+                r.getId(),
+                r.getStatus(), r.getType(), r.getCreatedAt(), r.getStartDate(),
+                r.getEndDate(), r.getTimeWindow(), r.getDescription(), r.getIsPaid(),
+                (r.getCustomer() != null ? r.getCustomer().getId() : null),
+                (r.getCompany() != null ? r.getCompany().getId() : null),
+                (r.getProperty() != null ? r.getProperty().getId() : null),
+                (r.getWorker() != null ? r.getWorker().getId() : null),
+                (r.getVehicle() != null ? r.getVehicle().getId() : null),
+                (r.getOffer() != null ? r.getOffer().getId() : null)
+        );
     }
 }

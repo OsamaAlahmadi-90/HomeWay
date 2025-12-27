@@ -12,4 +12,5 @@ public interface RequestRepository extends JpaRepository<Request, Integer> {
     Request findRequestById(Integer id);
 
     List<Request> findAllByCompany_Id(Integer companyId);
+    List<Request> findAllByCustomer_Id(Integer customerId);
 }

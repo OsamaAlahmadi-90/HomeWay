@@ -1,8 +1,7 @@
 package com.example.homeway.DTO.In;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
+
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,13 +9,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CompanyDTOIn {
+public class UserDTOIn {
+
     @NotEmpty
-    @Size(min = 4, max = 40)
     private String username;
 
     @NotEmpty
-    @Size(min = 3, max = 100)
     private String name;
 
     @NotEmpty
@@ -32,13 +30,9 @@ public class CompanyDTOIn {
     @NotEmpty
     private String city;
 
-    @NotEmpty
-    @Size(min = 6, max = 100)
+    //i might remove this
     private String password;
 
     @NotEmpty
     private String role;
-    
-    @NotEmpty
-    private String status;
 }

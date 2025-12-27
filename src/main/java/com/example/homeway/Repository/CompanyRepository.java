@@ -13,4 +13,7 @@ public interface CompanyRepository extends JpaRepository<Company, Integer> {
 
     @Query("select c from Company c where c.user.role = ?1")
     List<Company> findAllByUser_Role(String role);
+
+    @Query("SELECT c FROM Company c WHERE c.status = 'pending'")
+    List<Company> getPendingCompanies();
 }

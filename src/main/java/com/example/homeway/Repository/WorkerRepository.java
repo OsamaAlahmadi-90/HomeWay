@@ -34,6 +34,7 @@ public interface WorkerRepository extends JpaRepository<Worker, Integer> {
             where w.company.id = ?1
               and w.isAvailable = true
               and w.user.role = 'WORKER'
+              and w.isActive = true
               and w.company.user.role = 'MAINTENANCE_COMPANY'
            """)
     Worker findAvailableMaintenanceWorker(Integer companyId);
