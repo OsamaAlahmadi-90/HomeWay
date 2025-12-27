@@ -28,8 +28,7 @@ public class NotificationService {
     // =====================================
     public List<Notification> getAllNotifications() {
 
-        List<Notification> notifications =
-                notificationRepository.findAllByOrderByCreated_atDesc();
+        List<Notification> notifications = notificationRepository.getAllNotificationsOrdered();
 
         if (notifications.isEmpty()) {
             throw new ApiException("No notifications found");

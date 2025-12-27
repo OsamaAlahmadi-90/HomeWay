@@ -9,7 +9,12 @@ import java.util.List;
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Integer> {
 
-    List<Notification> findAllByOrderByCreated_atDesc();
+    @Query("""
+       SELECT n
+       FROM Notification n
+       ORDER BY n.created_at DESC
+       """)
+    List<Notification> getAllNotificationsOrdered();
 
     Notification findNotificationById(Integer id);
 

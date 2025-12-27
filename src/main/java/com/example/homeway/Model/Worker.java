@@ -38,4 +38,6 @@ public class Worker {
     @JsonIgnore
     private Set<Request> requests;
 
+    @OneToMany(mappedBy = "worker")
+    private Set<Notification> notifications;
 }

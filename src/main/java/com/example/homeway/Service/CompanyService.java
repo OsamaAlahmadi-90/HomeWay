@@ -79,6 +79,10 @@ public class CompanyService {
             throw new ApiException("only INSPECTION_COMPANY can approve inspection requests");
         }
 
+        if(!"approved".equalsIgnoreCase(company.getStatus())){
+            throw new ApiException("only approved companies can manage requests");
+        }
+
         Request request = requestRepository.findRequestById(requestId);
         if (request == null) {
             throw new ApiException("request not found with id: " + requestId);
@@ -125,6 +129,10 @@ public class CompanyService {
         Company company = user.getCompany();
         if (company == null){
             throw new ApiException("company profile not found");
+        }
+
+        if(!"approved".equalsIgnoreCase(company.getStatus())){
+            throw new ApiException("only approved companies can manage requests");
         }
 
         if (!"INSPECTION_COMPANY".equalsIgnoreCase(user.getRole())) {
@@ -180,6 +188,10 @@ public class CompanyService {
         Company company = user.getCompany();
         if (company == null) throw new ApiException("company profile not found");
 
+        if(!"approved".equalsIgnoreCase(company.getStatus())){
+            throw new ApiException("only approved companies can manage requests");
+        }
+
         if (!"INSPECTION_COMPANY".equalsIgnoreCase(user.getRole())) {
             throw new ApiException("only INSPECTION_COMPANY can complete inspection requests");
         }
@@ -221,6 +233,10 @@ public class CompanyService {
         Company company = user.getCompany();
         if (company == null) throw new ApiException("company profile not found");
 
+        if(!"approved".equalsIgnoreCase(company.getStatus())){
+            throw new ApiException("only approved companies can manage requests");
+        }
+
         if (!"INSPECTION_COMPANY".equalsIgnoreCase(user.getRole())) {
             throw new ApiException("only INSPECTION_COMPANY can reject inspection requests");
         }
@@ -261,6 +277,10 @@ public class CompanyService {
         Company company = user.getCompany();
         if (company == null) {
             throw new ApiException("company profile not found");
+        }
+
+        if(!"approved".equalsIgnoreCase(company.getStatus())){
+            throw new ApiException("only approved companies can manage requests");
         }
 
         if (!"MOVING_COMPANY".equalsIgnoreCase(user.getRole())) {
@@ -312,6 +332,10 @@ public class CompanyService {
         Company company = user.getCompany();
         if (company == null) {
             throw new ApiException("company profile not found");
+        }
+
+        if(!"approved".equalsIgnoreCase(company.getStatus())){
+            throw new ApiException("only approved companies can manage requests");
         }
 
         if (!"MOVING_COMPANY".equalsIgnoreCase(user.getRole())) {
@@ -379,6 +403,10 @@ public class CompanyService {
         Company company = user.getCompany();
         if (company == null) throw new ApiException("company profile not found");
 
+        if(!"approved".equalsIgnoreCase(company.getStatus())){
+            throw new ApiException("only approved companies can manage requests");
+        }
+
         if (!"MOVING_COMPANY".equalsIgnoreCase(user.getRole())) {
             throw new ApiException("only MOVING_COMPANY can complete moving requests");
         }
@@ -433,6 +461,10 @@ public class CompanyService {
             throw new ApiException("company profile not found");
         }
 
+        if(!"approved".equalsIgnoreCase(company.getStatus())){
+            throw new ApiException("only approved companies can manage requests");
+        }
+
         if (!"MOVING_COMPANY".equalsIgnoreCase(user.getRole())) {
             throw new ApiException("only MOVING_COMPANY can reject moving requests");
         }
@@ -473,6 +505,10 @@ public class CompanyService {
 
         if (!"REDESIGN_COMPANY".equalsIgnoreCase(user.getRole())) {
             throw new ApiException("only REDESIGN_COMPANY can approve redesign requests");
+        }
+
+        if(!"approved".equalsIgnoreCase(company.getStatus())){
+            throw new ApiException("only approved companies can manage requests");
         }
 
         Request request = requestRepository.findRequestById(requestId);
@@ -520,6 +556,10 @@ public class CompanyService {
         Company company = user.getCompany();
         if (company == null) {
             throw new ApiException("company profile not found");
+        }
+
+        if(!"approved".equalsIgnoreCase(company.getStatus())){
+            throw new ApiException("only approved companies can manage requests");
         }
 
         if (!"REDESIGN_COMPANY".equalsIgnoreCase(user.getRole())) {
@@ -581,6 +621,10 @@ public class CompanyService {
             throw new ApiException("only REDESIGN_COMPANY can complete redesign requests");
         }
 
+        if(!"approved".equalsIgnoreCase(company.getStatus())){
+            throw new ApiException("only approved companies can manage requests");
+        }
+
         Request request = requestRepository.findRequestById(requestId);
         if (request == null) throw new ApiException("request not found with id: " + requestId);
 
@@ -621,6 +665,10 @@ public class CompanyService {
             throw new ApiException("only REDESIGN_COMPANY can reject redesign requests");
         }
 
+        if(!"approved".equalsIgnoreCase(company.getStatus())){
+            throw new ApiException("only approved companies can manage requests");
+        }
+
         Request request = requestRepository.findRequestById(requestId);
         if (request == null) throw new ApiException("request not found with id: " + requestId);
 
@@ -657,6 +705,10 @@ public class CompanyService {
             throw new ApiException("only MAINTENANCE_COMPANY can approve maintenance requests");
         }
 
+        if(!"approved".equalsIgnoreCase(company.getStatus())){
+            throw new ApiException("only approved companies can manage requests");
+        }
+
         Request request = requestRepository.findRequestById(requestId);
         if (request == null) throw new ApiException("request not found with id: " + requestId);
 
@@ -684,9 +736,7 @@ public class CompanyService {
         request.setStatus("approved");
         requestRepository.save(request);
 
-        createCustomerNotification(request.getCustomer(),
-                "approved request",
-                "Your maintenance request was approved. Please accept/reject the offer.");
+        createCustomerNotification(request.getCustomer(), "approved request", "Your maintenance request was approved. Please accept/reject the offer.");
     }
 
     @Transactional
@@ -698,6 +748,10 @@ public class CompanyService {
         Company company = user.getCompany();
         if (company == null){
             throw new ApiException("company profile not found");
+        }
+
+        if(!"approved".equalsIgnoreCase(company.getStatus())){
+            throw new ApiException("only approved companies can manage requests");
         }
 
         if (!"MAINTENANCE_COMPANY".equalsIgnoreCase(user.getRole())) {
@@ -752,6 +806,10 @@ public class CompanyService {
             throw new ApiException("company profile not found");
         }
 
+        if(!"approved".equalsIgnoreCase(company.getStatus())){
+            throw new ApiException("only approved companies can manage requests");
+        }
+
         if (!"MAINTENANCE_COMPANY".equalsIgnoreCase(user.getRole())) {
             throw new ApiException("only MAINTENANCE_COMPANY can complete maintenance requests");
         }
@@ -793,6 +851,10 @@ public class CompanyService {
         if (user == null) throw new ApiException("unauthorized");
         Company company = user.getCompany();
         if (company == null) throw new ApiException("company profile not found");
+
+        if(!"approved".equalsIgnoreCase(company.getStatus())){
+            throw new ApiException("only approved companies can manage requests");
+        }
 
         if (!"MAINTENANCE_COMPANY".equalsIgnoreCase(user.getRole())) {
             throw new ApiException("only MAINTENANCE_COMPANY can reject maintenance requests");

@@ -36,4 +36,8 @@ public class Notification {
     @ManyToOne
     @JsonIgnore
     private Company company;
+
+    @ManyToOne
+    @JsonIgnore
+    private Worker worker;
 }

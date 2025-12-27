@@ -16,6 +16,7 @@ public interface WorkerRepository extends JpaRepository<Worker, Integer> {
             where w.company.id = ?1
               and w.isAvailable = true
               and w.user.role = 'WORKER'
+              and w.isActive = true
               and w.company.user.role = 'INSPECTION_COMPANY'
            """)
     Worker findAvailableInspectorWorker(Integer companyId);
@@ -25,6 +26,7 @@ public interface WorkerRepository extends JpaRepository<Worker, Integer> {
             where w.company.id = ?1
               and w.isAvailable = true
               and w.user.role = 'WORKER'
+              and w.isActive = true
               and w.company.user.role = 'MOVING_COMPANY'
            """)
     Worker findAvailableMovingWorker(Integer companyId);
@@ -44,6 +46,7 @@ public interface WorkerRepository extends JpaRepository<Worker, Integer> {
         where w.company.id = ?1
           and w.isAvailable = true
           and w.user.role = 'WORKER'
+          and w.isActive = true
           and w.company.user.role = 'REDESIGN_COMPANY'
        """)
     Worker findAvailableRedesignWorker(Integer companyId);

@@ -49,4 +49,17 @@ public class WorkerController {
         workerService.deleteWorker(user, workerId);
         return ResponseEntity.status(200).body(new ApiResponse("Worker deleted successfully"));
     }
+
+    @PutMapping("/activate/{workerId}")
+    public ResponseEntity<?> activateWorker(@AuthenticationPrincipal User user,@PathVariable Integer workerId) {
+        workerService.activateWorker(user,workerId);
+        return ResponseEntity.status(200).body(new ApiResponse("Worker activated successfully"));
+    }
+
+
+    @PutMapping("/deactivate/{workerId}")
+    public ResponseEntity<String> deactivateWorker(@AuthenticationPrincipal User user, @PathVariable Integer workerId) {
+        workerService.deactivateWorker(user, workerId);
+        return ResponseEntity.status(200).body("Worker deactivated");
+    }
 }

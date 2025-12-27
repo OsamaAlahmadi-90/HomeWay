@@ -2,15 +2,19 @@ package com.example.homeway.Service;
 
 
 import com.example.homeway.API.ApiException;
+import com.example.homeway.DTO.In.NotificationDTOIn;
 import com.example.homeway.DTO.In.WorkerDTOIn;
 import com.example.homeway.Model.Company;
+import com.example.homeway.Model.Notification;
 import com.example.homeway.Model.User;
 import com.example.homeway.Model.Worker;
 import com.example.homeway.Repository.CompanyRepository;
+import com.example.homeway.Repository.NotificationRepository;
 import com.example.homeway.Repository.WorkerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -19,6 +23,7 @@ public class WorkerService {
 
     private final WorkerRepository workerRepository;
     private final CompanyRepository companyRepository;
+    private final NotificationRepository notificationRepository;
 
     // ===============================
     // Get company workers
@@ -86,5 +91,78 @@ public class WorkerService {
         }
 
         workerRepository.delete(worker);
+    }
+
+
+    public void activateWorker(User user, Integer workerId) {
+
+        if (user == null) {
+            throw new ApiException("unauthorized");
+        }
+
+        Company company = user.getCompany();
+        if (company == null) {
+            throw new ApiException("company profile not found");
+        }
+
+        Worker worker = workerRepository.findWorkerById(workerId);
+        if (worker == null) {
+            throw new ApiException("worker not found with id: " + workerId);
+        }
+
+        if (!worker.getCompany().getId().equals(company.getId())) {
+            throw new ApiException("worker does not belong to your company");
+        }
+
+        if (worker.getIsActive()) {
+            throw new ApiException("worker is already active");
+        }
+
+        worker.setIsActive(true);
+        workerRepository.save(worker);
+
+        createWorkerNotification(worker, "Account Activated", "Your worker account has been activated by " + user.getName());
+    }
+
+    public void deactivateWorker(User user, Integer workerId) {
+
+        if (user == null) {
+            throw new ApiException("unauthorized");
+        }
+
+        Company company = user.getCompany();
+        if (company == null) {
+            throw new ApiException("company profile not found");
+        }
+
+        Worker worker = workerRepository.findWorkerById(workerId);
+        if (worker == null) {
+            throw new ApiException("worker not found with id: " + workerId);
+        }
+
+        if (!worker.getCompany().getId().equals(company.getId())) {
+            throw new ApiException("worker does not belong to your company");
+        }
+
+        if (!worker.getIsActive()) {
+            throw new ApiException("worker is already inactive");
+        }
+
+        worker.setIsActive(false);
+        workerRepository.save(worker);
+
+
+        createWorkerNotification(worker, "Account Deactivated", "Your worker account has been deactivated by " + user.getName());
+    }
+    private void createWorkerNotification(Worker worker, String title, String message) {
+        if (worker == null) return;
+
+        Notification notification = new Notification();
+        notification.setTitle(title);
+        notification.setMessage(message);
+        notification.setCreated_at(LocalDateTime.now());
+        notification.setWorker(worker);
+
+        notificationRepository.save(notification);
     }
 }

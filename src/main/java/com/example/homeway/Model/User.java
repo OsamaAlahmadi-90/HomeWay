@@ -1,5 +1,6 @@
 package com.example.homeway.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -68,6 +69,9 @@ public class User implements UserDetails {
     @PrimaryKeyJoinColumn
     private Worker worker;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private UserSubscription userSubscription;
 
 
     @Override
