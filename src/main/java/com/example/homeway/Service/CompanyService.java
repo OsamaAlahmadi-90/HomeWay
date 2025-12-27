@@ -119,9 +119,13 @@ public class CompanyService {
     @Transactional
     public void startInspectionRequest(User user, Integer requestId) {
 
-        if (user == null) throw new ApiException("unauthorized");
+        if (user == null) {
+            throw new ApiException("unauthorized");
+        }
         Company company = user.getCompany();
-        if (company == null) throw new ApiException("company profile not found");
+        if (company == null){
+            throw new ApiException("company profile not found");
+        }
 
         if (!"INSPECTION_COMPANY".equalsIgnoreCase(user.getRole())) {
             throw new ApiException("only INSPECTION_COMPANY can start inspection requests");

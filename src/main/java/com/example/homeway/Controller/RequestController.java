@@ -2,7 +2,8 @@ package com.example.homeway.Controller;
 
 
 import com.example.homeway.API.ApiResponse;
-import com.example.homeway.DTO.In.RequestDTOIn;
+import com.example.homeway.DTO.In.RequestCreateDTOIn;
+import com.example.homeway.DTO.In.RequestUpdateDTOIn;
 import com.example.homeway.Model.User;
 import com.example.homeway.Service.RequestService;
 import jakarta.validation.Valid;
@@ -40,7 +41,7 @@ public class RequestController {
     }
 
     @PutMapping("/update/{requestId}")
-    public ResponseEntity<?> updateRequest(@PathVariable Integer requestId, @Valid @RequestBody RequestDTOIn dto) {
+    public ResponseEntity<?> updateRequest(@PathVariable Integer requestId, @Valid @RequestBody RequestUpdateDTOIn dto) {
         requestService.updateRequest(requestId, dto);
         return ResponseEntity.ok(new ApiResponse("request updated"));
     }
@@ -53,25 +54,25 @@ public class RequestController {
 
     //Customer
     @PostMapping("/inspection/{propertyId}/{companyId}")
-    public ResponseEntity<?> requestInspection(@AuthenticationPrincipal User user, @PathVariable Integer propertyId, @PathVariable Integer companyId, @Valid @RequestBody RequestDTOIn dto) {
+    public ResponseEntity<?> requestInspection(@AuthenticationPrincipal User user, @PathVariable Integer propertyId, @PathVariable Integer companyId, @Valid @RequestBody RequestCreateDTOIn dto) {
         requestService.requestInspection(user, propertyId, dto, companyId);
         return ResponseEntity.ok(new ApiResponse("inspection request created"));
     }
 
     @PostMapping("/moving/{propertyId}/{companyId}")
-    public ResponseEntity<?> requestMoving(@AuthenticationPrincipal User user, @PathVariable Integer propertyId, @PathVariable Integer companyId, @Valid @RequestBody RequestDTOIn dto) {
+    public ResponseEntity<?> requestMoving(@AuthenticationPrincipal User user, @PathVariable Integer propertyId, @PathVariable Integer companyId, @Valid @RequestBody RequestCreateDTOIn dto) {
         requestService.requestMoveToHouse(user, propertyId, dto, companyId);
         return ResponseEntity.ok(new ApiResponse("moving request created"));
     }
 
     @PostMapping("/maintenance/{propertyId}/{companyId}")
-    public ResponseEntity<?> requestMaintenance(@AuthenticationPrincipal User user, @PathVariable Integer propertyId, @PathVariable Integer companyId, @Valid @RequestBody RequestDTOIn dto) {
+    public ResponseEntity<?> requestMaintenance(@AuthenticationPrincipal User user, @PathVariable Integer propertyId, @PathVariable Integer companyId, @Valid @RequestBody RequestCreateDTOIn dto) {
         requestService.requestMaintenance(user, propertyId, dto, companyId);
         return ResponseEntity.ok(new ApiResponse("maintenance request created"));
     }
 
     @PostMapping("/redesign/{propertyId}/{companyId}")
-    public ResponseEntity<?> requestRedesign(@AuthenticationPrincipal User user, @PathVariable Integer propertyId, @PathVariable Integer companyId, @Valid @RequestBody RequestDTOIn dto) {
+    public ResponseEntity<?> requestRedesign(@AuthenticationPrincipal User user, @PathVariable Integer propertyId, @PathVariable Integer companyId, @Valid @RequestBody RequestCreateDTOIn dto) {
         requestService.requestResign(user, propertyId, dto, companyId);
         return ResponseEntity.ok(new ApiResponse("redesign request created"));
     }

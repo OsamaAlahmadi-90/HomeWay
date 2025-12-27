@@ -2,6 +2,7 @@ package com.example.homeway.Controller;
 
 import com.example.homeway.API.ApiResponse;
 import com.example.homeway.DTO.In.ReportDTOIn;
+import com.example.homeway.DTO.In.ReportUpdateDTOIn;
 import com.example.homeway.Model.Report;
 import com.example.homeway.Model.User;
 import com.example.homeway.Service.ReportService;
@@ -37,7 +38,7 @@ public class ReportController {
 
     // WORKER only (must own request)
     @PutMapping("/update/{reportId}")
-    public ResponseEntity<?> updateReport(@AuthenticationPrincipal User user, @PathVariable Integer reportId, @RequestBody @Valid ReportDTOIn dto) {
+    public ResponseEntity<?> updateReport(@AuthenticationPrincipal User user, @PathVariable Integer reportId, @RequestBody @Valid ReportUpdateDTOIn dto) {
         reportService.updateReport(user, reportId, dto);
         return ResponseEntity.status(200).body(new ApiResponse("Report updated successfully"));
     }

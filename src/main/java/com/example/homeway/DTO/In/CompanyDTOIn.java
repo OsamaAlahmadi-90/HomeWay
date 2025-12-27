@@ -11,34 +11,33 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CompanyDTOIn {
-    @NotEmpty
+    @NotEmpty(message = "Name must not be empty")
     @Size(min = 4, max = 40)
     private String username;
 
-    @NotEmpty
+    @NotEmpty(message = "Name must not be empty")
     @Size(min = 3, max = 100)
     private String name;
 
-    @NotEmpty
-    @Email
+    @NotEmpty(message = "email must not be empty")
+    @Email(message = "email must not be valid")
     private String email;
 
-    @NotEmpty
+    @NotEmpty(message = "phone must not be empty")
     private String phone;
 
-    @NotEmpty
+    @NotEmpty(message = "country must not be empty")
     private String country;
 
-    @NotEmpty
+    @NotEmpty(message = "city must not be empty")
     private String city;
 
-    @NotEmpty
-    @Size(min = 6, max = 100)
+    @NotEmpty(message = "password must not be empty")
+    @Size(min = 6, max = 100, message = "password must be more than 5 characters")
     private String password;
 
-    @NotEmpty
+    @NotEmpty(message = "role must not be empty")
     private String role;
-    
-    @NotEmpty
+
     private String status;
 }

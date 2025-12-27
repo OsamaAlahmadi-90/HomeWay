@@ -1,7 +1,7 @@
 package com.example.homeway.DTO.In;
 
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,18 +10,16 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestDTOIn {
-
+public class RequestUpdateDTOIn {
     @NotNull
     private Integer companyId;
 
     @NotNull
     private Integer propertyId;
 
-    @NotBlank(message = "timeWindow is required")
+    @NotEmpty(message = "timeWindow is required")
     private String timeWindow;
 
-    @NotBlank(message = "description is required")
+    @NotEmpty(message = "description is required")
     private String description;
-
 }

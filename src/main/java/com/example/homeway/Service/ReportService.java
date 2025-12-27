@@ -2,6 +2,7 @@ package com.example.homeway.Service;
 
 import com.example.homeway.API.ApiException;
 import com.example.homeway.DTO.In.ReportDTOIn;
+import com.example.homeway.DTO.In.ReportUpdateDTOIn;
 import com.example.homeway.Model.Report;
 import com.example.homeway.Model.Request;
 import com.example.homeway.Model.User;
@@ -83,18 +84,25 @@ public class ReportService {
         reportRepository.save(report);
     }
 
-    public void updateReport(User user, Integer reportId, ReportDTOIn dto) {
+    public void updateReport(User user, Integer reportId, ReportUpdateDTOIn dto) {
         Worker worker = requireWorker(user);
 
         Report report = reportRepository.findReportById(reportId);
         if (report == null) throw new ApiException("Report not found");
 
-
         requireReportOwnedByWorker(report, worker.getId());
 
-        report.setFindings(dto.getFindings());
-        report.setRecommendations(dto.getRecommendations());
-        report.setImageURL(dto.getImageURL());
+        if (dto.getFindings() != null && !dto.getFindings().isBlank()) {
+            report.setFindings(dto.getFindings());
+        }
+
+        if (dto.getRecommendations() != null && !dto.getRecommendations().isBlank()) {
+            report.setRecommendations(dto.getRecommendations());
+        }
+
+        if (dto.getImageURL() != null && !dto.getImageURL().isBlank()) {
+            report.setImageURL(dto.getImageURL());
+        }
 
         reportRepository.save(report);
     }

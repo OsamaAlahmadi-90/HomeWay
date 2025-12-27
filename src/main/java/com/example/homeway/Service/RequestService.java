@@ -1,10 +1,12 @@
 package com.example.homeway.Service;
 
 import com.example.homeway.API.ApiException;
-import com.example.homeway.DTO.In.RequestDTOIn;
+import com.example.homeway.DTO.In.RequestCreateDTOIn;
+import com.example.homeway.DTO.In.RequestUpdateDTOIn;
 import com.example.homeway.DTO.Out.RequestDTOOut;
 import com.example.homeway.Model.*;
 import com.example.homeway.Repository.CompanyRepository;
+import com.example.homeway.Repository.NotificationRepository;
 import com.example.homeway.Repository.PropertyRepository;
 import com.example.homeway.Repository.RequestRepository;
 import jakarta.transaction.Transactional;
@@ -22,6 +24,7 @@ public class RequestService {
     private final RequestRepository requestRepository;
     private final PropertyRepository propertyRepository;
     private final CompanyRepository companyRepository;
+    private final NotificationRepository notificationRepository;
 
     // admin
     public List<RequestDTOOut> getAllRequests() {
@@ -64,7 +67,7 @@ public class RequestService {
         return outs;
     }
 
-    public void updateRequest(Integer requestId, RequestDTOIn dto) {
+    public void updateRequest(Integer requestId, RequestUpdateDTOIn dto) {
         Request request = requestRepository.findRequestById(requestId);
         if (request == null) throw new ApiException("request not found with id: " + requestId);
 
@@ -91,9 +94,11 @@ public class RequestService {
     }
 
     @Transactional
-    public void requestInspection(User user, Integer propertyId, RequestDTOIn dto, Integer companyID) {
+    public void requestInspection(User user, Integer propertyId, RequestCreateDTOIn dto, Integer companyID) {
 
-        if (user == null) throw new ApiException("unauthorized");
+        if (user == null) {
+            throw new ApiException("unauthorized");
+        }
         Customer customer = user.getCustomer();
         if (customer == null) throw new ApiException("customer profile not found");
 
@@ -133,10 +138,12 @@ public class RequestService {
 
         request.setCompany(company);
         requestRepository.save(request);
+
+        createCompanyNotification(company, "New inspection request", "A new inspection request has been created for your company.");
     }
 
     @Transactional
-    public void requestMoveToHouse(User user, Integer propertyId, RequestDTOIn dto,Integer companyID){
+    public void requestMoveToHouse(User user, Integer propertyId, RequestCreateDTOIn dto, Integer companyID){
         if (user == null) throw new ApiException("unauthorized");
         Customer customer = user.getCustomer();
         if (customer == null) throw new ApiException("customer profile not found");
@@ -177,9 +184,10 @@ public class RequestService {
 
         request.setCompany(company);
         requestRepository.save(request);
+        createCompanyNotification(company,"New moving request", "A new moving request has been created for your company.");
     }
 
-    public void requestMaintenance(User user, Integer propertyId, RequestDTOIn dto, Integer companyID){
+    public void requestMaintenance(User user, Integer propertyId, RequestCreateDTOIn dto, Integer companyID){
         if (user == null) throw new ApiException("unauthorized");
         Customer customer = user.getCustomer();
         if (customer == null) throw new ApiException("customer profile not found");
@@ -219,10 +227,12 @@ public class RequestService {
 
         request.setCompany(company);
         requestRepository.save(request);
+
+        createCompanyNotification(company, "New maintenance request", "A new maintenance request has been created for your company.");
     }
 
     @Transactional
-    public void requestResign(User user, Integer propertyId, RequestDTOIn dto, Integer companyID){
+    public void requestResign(User user, Integer propertyId, RequestCreateDTOIn dto, Integer companyID){
         if (user == null) throw new ApiException("unauthorized");
         Customer customer = user.getCustomer();
         if (customer == null) throw new ApiException("customer profile not found");
@@ -262,8 +272,20 @@ public class RequestService {
 
         request.setCompany(company);
         requestRepository.save(request);
+
+        createCompanyNotification(company, "New redesign request", "A new redesign request has been created for your company.");
     }
 
+    private void createCompanyNotification(Company company, String title, String message) {
+        if (company == null) return;
+
+        Notification notification = new Notification();
+        notification.setTitle(title);
+        notification.setMessage(message);
+        notification.setCreated_at(LocalDateTime.now());
+        notification.setCompany(company);
+        notificationRepository.save(notification);
+    }
     public RequestDTOOut convertToDTO(Request r) {
         return new RequestDTOOut(
                 r.getId(),

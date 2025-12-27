@@ -26,8 +26,7 @@ public class WorkerController {
     // Description: Get all workers for the logged-in company
     // =====================================
     @GetMapping("/get-my-workers")
-    public ResponseEntity<List<Worker>> getAllWorkers(
-            @AuthenticationPrincipal User user) {
+    public ResponseEntity<List<Worker>> getAllWorkers(@AuthenticationPrincipal User user) {
         return ResponseEntity.status(200).body(workerService.getCompanyWorkers(user));
     }
 
