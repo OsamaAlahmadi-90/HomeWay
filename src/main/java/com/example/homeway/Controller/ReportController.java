@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/report")
 @RequiredArgsConstructor
@@ -49,5 +51,23 @@ public class ReportController {
         reportService.deleteReport(user, reportId);
         return ResponseEntity.status(200).body(new ApiResponse("Report deleted successfully"));
     }
+
+    //extra endpoints
+
+    // Worker OR Customer
+    @GetMapping("/request/{requestId}")
+    public ResponseEntity<?> getReportsByRequest(@AuthenticationPrincipal User user, @PathVariable Integer requestId) {
+        List<Report> reports = reportService.getReportsByRequest(user, requestId);
+        return ResponseEntity.status(200).body(reports);
+    }
+
+
+    // Worker OR Customer
+    @GetMapping("/read/{reportId}")
+    public ResponseEntity<?> getReportForRead(@AuthenticationPrincipal User user, @PathVariable Integer reportId) {
+        Report report = reportService.getReportForRead(user, reportId);
+        return ResponseEntity.status(200).body(report);
+    }
+
 
 }

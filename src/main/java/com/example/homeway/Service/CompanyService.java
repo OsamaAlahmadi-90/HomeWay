@@ -107,7 +107,7 @@ public class CompanyService {
         //create offer
         Offer offer = new Offer();
         offer.setPrice(price);
-        offer.setStatus("not_paid");
+        offer.setStatus("pending");
         offer.setCreatedAt(LocalDateTime.now());
         offer.setRequest(request);
         offerRepository.save(offer);
@@ -153,14 +153,18 @@ public class CompanyService {
             throw new ApiException("only approved requests can be started");
         }
 
-        Offer offer = request.getOffer();
-        if (offer == null) {
-            throw new ApiException("offer does not exist for this request");
-        }
-
-        if (!"paid".equalsIgnoreCase(offer.getStatus())) {
+        if(!"paid".equalsIgnoreCase(request.getStatus())){
             throw new ApiException("offer is not paid yet");
         }
+
+//        Offer offer = request.getOffer();
+//        if (offer == null) {
+//            throw new ApiException("offer does not exist for this request");
+//        }
+//
+//        if (!"accepted".equalsIgnoreCase(offer.getStatus())) {
+//            throw new ApiException("offer is not paid yet");
+//        }
 
         Worker worker = workerRepository.findAvailableInspectorWorker(company.getId());
         if (worker == null){
