@@ -1,7 +1,7 @@
 package com.example.homeway.Controller;
 
 import com.example.homeway.API.ApiResponse;
-import com.example.homeway.Model.Payment;
+import com.example.homeway.Model.SubscriptionPayment;
 import com.example.homeway.Model.User;
 import com.example.homeway.Service.UserSubscriptionService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class UserSubscriptionController {
 
     // USER ONLY - Subscribe to AI plan
     @PostMapping("/add/plan-type/{planType}")
-    public ResponseEntity<?> addSubscription(@AuthenticationPrincipal User user, @PathVariable String planType, @RequestBody Payment payment) {
+    public ResponseEntity<?> addSubscription(@AuthenticationPrincipal User user, @PathVariable String planType, @RequestBody SubscriptionPayment payment) {
 
         return ResponseEntity.status(200).body(subscriptionService.addSubscription(user.getId(), planType, payment));
     }
@@ -49,7 +49,7 @@ public class UserSubscriptionController {
 
     // USER ONLY - Renew subscription
     @PutMapping("/renew")
-    public ResponseEntity<?> renewSubscription(@AuthenticationPrincipal User user, @RequestBody Payment payment) {
+    public ResponseEntity<?> renewSubscription(@AuthenticationPrincipal User user, @RequestBody SubscriptionPayment payment) {
 
         return ResponseEntity.status(200).body(subscriptionService.renewSubscription(user.getId(), payment));
     }

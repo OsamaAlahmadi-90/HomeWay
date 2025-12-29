@@ -68,7 +68,7 @@ public class UserSubscription {
     @OneToOne(mappedBy = "userSubscription", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     @JsonIgnore
-    private Payment payment;
+    private SubscriptionPayment payment;
 
 
 }

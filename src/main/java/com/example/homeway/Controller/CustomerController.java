@@ -56,4 +56,17 @@ public class CustomerController {
         return ResponseEntity.status(200).body(result);
     }
 
+    //Extra endpoints
+    @PutMapping("/offer/accept/{offerId}")
+    public ResponseEntity<?> acceptOffer(@AuthenticationPrincipal User user, @PathVariable Integer offerId) {
+        customerService.acceptOffer(user, offerId);
+        return ResponseEntity.status(200).body(new ApiResponse("Offer accepted, proceed to payment "));
+    }
+
+    @PutMapping("/offer/reject/{offerId}")
+    public ResponseEntity<?> rejectOffer(@AuthenticationPrincipal User user, @PathVariable Integer offerId) {
+        customerService.rejectOffer(user, offerId);
+        return ResponseEntity.status(200).body(new ApiResponse("Offer rejected"));
+    }
+
 }

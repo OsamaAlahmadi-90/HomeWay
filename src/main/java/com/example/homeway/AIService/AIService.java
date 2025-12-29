@@ -240,7 +240,7 @@ public class AIService {
                 
                          Your job:
                          - Estimate how long an INSPECTION usually takes
-                         - Estimate how long moving usually takes
+                         - Estimate how long MOVING usually takes
                          - Estimate how long MAINTENANCE usually takes
                          - Estimate how long a REDESIGN might take
                 

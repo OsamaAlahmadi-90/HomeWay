@@ -1,10 +1,10 @@
 package com.example.homeway.Service;
 
 import com.example.homeway.API.ApiException;
-import com.example.homeway.Model.Payment;
+import com.example.homeway.Model.SubscriptionPayment;
 import com.example.homeway.Model.User;
 import com.example.homeway.Model.UserSubscription;
-import com.example.homeway.Repository.PaymentRepository;
+import com.example.homeway.Repository.SubscriptionPaymentRepository;
 import com.example.homeway.Repository.UserRepository;
 import com.example.homeway.Repository.UserSubscriptionRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -22,10 +22,10 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class PaymentService {
+public class SubscriptionPaymentService {
 
-    private final UserSubscriptionRepository subscriptionRepository;
-    private final PaymentRepository paymentRepository;
+    private final UserSubscriptionRepository UserSubscriptionRepository;
+    private final SubscriptionPaymentRepository subscriptionPaymentRepository;
     private final UserRepository userRepository;
 
     @Value("${moyasar.api.key}")
@@ -35,10 +35,10 @@ public class PaymentService {
     private static final String MOYASAR_API_URL = "https://api.moyasar.com/v1/payments/";
 
     // ================== CREATE PAYMENT ==================
-    public ResponseEntity<Map<String, String>> processPayment(Payment paymentRequest, Integer subscriptionId) {
+    public ResponseEntity<Map<String, String>> processPayment(SubscriptionPayment paymentRequest, Integer subscriptionId) {
 
         UserSubscription subscription =
-                subscriptionRepository.findUserSubscriptionById(subscriptionId);
+                UserSubscriptionRepository.findUserSubscriptionById(subscriptionId);
 
         if (subscription == null) {
             throw new ApiException("Subscription not found");
@@ -94,7 +94,7 @@ public class PaymentService {
             paymentRequest.setPaymentDate(LocalDateTime.now());
             paymentRequest.setStatus(json.get("status").asText());
 
-            paymentRepository.save(paymentRequest);
+            subscriptionPaymentRepository.save(paymentRequest);
 
             Map<String, String> result = new HashMap<>();
             result.put("transactionId", transactionId);
@@ -116,7 +116,7 @@ public class PaymentService {
         }
 
         UserSubscription subscription =
-                subscriptionRepository.findUserSubscriptionById(subscriptionId);
+                UserSubscriptionRepository.findUserSubscriptionById(subscriptionId);
 
         if (subscription == null) {
             throw new ApiException("Subscription not found");
@@ -126,8 +126,8 @@ public class PaymentService {
             throw new ApiException("Subscription already confirmed or invalid");
         }
 
-        Payment payment =
-                paymentRepository.findPaymentByUserSubscription(subscription);
+        SubscriptionPayment payment =
+                subscriptionPaymentRepository.findPaymentByUserSubscription(subscription);
 
         if (payment == null) {
             throw new ApiException("Payment not found");
@@ -158,7 +158,7 @@ public class PaymentService {
                 subscription.setNextBillingDate(LocalDateTime.now().plusMonths(1));
                 subscription.getUser().setIsSubscribed(true);
 
-                subscriptionRepository.save(subscription);
+                UserSubscriptionRepository.save(subscription);
                 userRepository.save(subscription.getUser());
             }
 
@@ -177,7 +177,7 @@ public class PaymentService {
     ) throws JsonProcessingException {
 
         UserSubscription subscription =
-                subscriptionRepository.findUserSubscriptionById(subscriptionId);
+                UserSubscriptionRepository.findUserSubscriptionById(subscriptionId);
 
         if (subscription == null) {
             throw new ApiException("Subscription not found");
@@ -187,8 +187,8 @@ public class PaymentService {
             throw new ApiException("Subscription already active");
         }
 
-        Payment payment =
-                paymentRepository.findPaymentByUserSubscription(subscription);
+        SubscriptionPayment payment =
+                subscriptionPaymentRepository.findPaymentByUserSubscription(subscription);
 
         if (payment == null) {
             throw new ApiException("Payment not found");
@@ -232,15 +232,15 @@ public class PaymentService {
 
             subscription.getUser().setIsSubscribed(true);
 
-            subscriptionRepository.save(subscription);
+            UserSubscriptionRepository.save(subscription);
             userRepository.save(subscription.getUser());
 
         } else {
             subscription.setStatus("FAILED");
-            subscriptionRepository.save(subscription);
+            UserSubscriptionRepository.save(subscription);
         }
 
-        paymentRepository.save(payment);
+        subscriptionPaymentRepository.save(payment);
     }
 
 }

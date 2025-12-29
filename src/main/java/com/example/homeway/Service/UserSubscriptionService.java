@@ -4,10 +4,10 @@ import com.example.homeway.API.ApiException;
 import com.example.homeway.DTO.Out.HistorySubscription;
 import com.example.homeway.DTO.Out.UserSubscriptionDTOOut;
 import com.example.homeway.EmailService.EmailService;
-import com.example.homeway.Model.Payment;
+import com.example.homeway.Model.SubscriptionPayment;
 import com.example.homeway.Model.User;
 import com.example.homeway.Model.UserSubscription;
-import com.example.homeway.Repository.PaymentRepository;
+import com.example.homeway.Repository.SubscriptionPaymentRepository;
 import com.example.homeway.Repository.UserRepository;
 import com.example.homeway.Repository.UserSubscriptionRepository;
 import jakarta.transaction.Transactional;
@@ -25,16 +25,16 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserSubscriptionService {
 
-    private final UserSubscriptionRepository subscriptionRepository;
-    private final PaymentRepository paymentRepository;
+    private final UserSubscriptionRepository UserSubscriptionRepository;
+    private final SubscriptionPaymentRepository subscriptionPaymentRepository;
     private final UserRepository userRepository;
-    private final PaymentService paymentService;
+    private final SubscriptionPaymentService subscriptionPaymentService;
     private final EmailService emailService;
 
     private static final Double AI_PRICE =  100.00;
 
     public List<UserSubscriptionDTOOut> getAllSubscriptions() {
-        return subscriptionRepository.findAll()
+        return UserSubscriptionRepository.findAll()
                 .stream()
                 .map(this::mapToDTOOUT)
                 .collect(Collectors.toList());
@@ -43,7 +43,7 @@ public class UserSubscriptionService {
     public ResponseEntity<Map<String, String>> addSubscription(
             Integer userId,
             String planType,
-            Payment payment
+            SubscriptionPayment payment
     ) {
         User user = userRepository.findUserById(userId);
         if (user == null) {
@@ -51,7 +51,7 @@ public class UserSubscriptionService {
         }
 
         UserSubscription existingSub =
-                subscriptionRepository.findUserSubscriptionById(userId);
+                UserSubscriptionRepository.findUserSubscriptionById(userId);
 
         if (existingSub != null &&
                 "ACTIVE".equalsIgnoreCase(existingSub.getStatus())) {
@@ -74,7 +74,7 @@ public class UserSubscriptionService {
 
             user.setIsSubscribed(false);
             userRepository.save(user);
-            subscriptionRepository.save(subscription);
+            UserSubscriptionRepository.save(subscription);
 
             Map<String, String> result = new HashMap<>();
             result.put("message", "FREE plan activated");
@@ -100,21 +100,21 @@ public class UserSubscriptionService {
             throw new ApiException("Insufficient amount");
         }
 
-        subscriptionRepository.save(subscription);
+        UserSubscriptionRepository.save(subscription);
         userRepository.save(user);
 
-        return paymentService.processPayment(payment, subscription.getId());
+        return subscriptionPaymentService.processPayment(payment, subscription.getId());
     }
 
 
     @Transactional
-    public ResponseEntity<Map<String, String>> renewSubscription(Integer userId, Payment newPaymentData) {
+    public ResponseEntity<Map<String, String>> renewSubscription(Integer userId, SubscriptionPayment newPaymentData) {
         User user = userRepository.findUserById(userId);
         if (user == null) {
             throw new ApiException("User not found with id " + userId);
         }
 
-        UserSubscription subscription = subscriptionRepository.findUserSubscriptionById(userId);
+        UserSubscription subscription = UserSubscriptionRepository.findUserSubscriptionById(userId);
         if (subscription == null) {
             throw new ApiException("Subscription not found");
         }
@@ -134,7 +134,7 @@ public class UserSubscriptionService {
 
         user.setIsSubscribed(true);
 
-        Payment existingPayment = paymentRepository.findPaymentByUserSubscription(subscription);
+        SubscriptionPayment existingPayment = subscriptionPaymentRepository.findPaymentByUserSubscription(subscription);
         if (existingPayment != null) {
             existingPayment.setName(newPaymentData.getName());
             existingPayment.setNumber(newPaymentData.getNumber());
@@ -145,20 +145,20 @@ public class UserSubscriptionService {
             existingPayment.setPaymentDate(LocalDateTime.now());
             existingPayment.setStatus("PENDING");
 
-            paymentRepository.save(existingPayment);
+            subscriptionPaymentRepository.save(existingPayment);
         }
 
         userRepository.save(user);
-        subscriptionRepository.save(subscription);
+        UserSubscriptionRepository.save(subscription);
 
-        return paymentService.processPayment(existingPayment, subscription.getId());
+        return subscriptionPaymentService.processPayment(existingPayment, subscription.getId());
     }
 
 
     @Transactional
     public void activateSubscription(Integer userId, Integer subscriptionId) {
         User user = userRepository.findUserById(userId);
-        UserSubscription subscription = subscriptionRepository.findUserSubscriptionById(subscriptionId);
+        UserSubscription subscription = UserSubscriptionRepository.findUserSubscriptionById(subscriptionId);
 
         if (user == null) {
             throw new ApiException("User not found");
@@ -188,13 +188,13 @@ public class UserSubscriptionService {
             subscription.getUser().setIsSubscribed(true);
         }
 
-        subscriptionRepository.save(subscription);
+        UserSubscriptionRepository.save(subscription);
         userRepository.save(subscription.getUser());
     }
 
     public void updateSubscriptionStatus(Integer userId, Integer subscriptionId, String status) {
         User user = userRepository.findUserById(userId);
-        UserSubscription subscription = subscriptionRepository.findUserSubscriptionById(subscriptionId);
+        UserSubscription subscription = UserSubscriptionRepository.findUserSubscriptionById(subscriptionId);
 
         if (subscription == null) {
             throw new ApiException("Subscription not found with id " + subscriptionId);
@@ -207,12 +207,12 @@ public class UserSubscriptionService {
         }
 
         subscription.setStatus(status.toUpperCase());
-        subscriptionRepository.save(subscription);
+        UserSubscriptionRepository.save(subscription);
     }
 
     public void cancelSubscription(Integer userId, Integer subscriptionId) {
         User user = userRepository.findUserById(userId);
-        UserSubscription subscription = subscriptionRepository.findUserSubscriptionById(subscriptionId);
+        UserSubscription subscription = UserSubscriptionRepository.findUserSubscriptionById(subscriptionId);
 
         if (subscription == null) {
             throw new ApiException("Subscription not found with id " + subscriptionId);
@@ -227,7 +227,7 @@ public class UserSubscriptionService {
         subscription.setStatus("CANCELLED");
         subscription.getUser().setIsSubscribed(false);
 
-        subscriptionRepository.save(subscription);
+        UserSubscriptionRepository.save(subscription);
         userRepository.save(subscription.getUser());
     }
 
@@ -236,7 +236,7 @@ public class UserSubscriptionService {
 
         System.out.println("Checking for expired subscriptions...");
 
-        List<UserSubscription> subscriptions = subscriptionRepository.findAll();
+        List<UserSubscription> subscriptions = UserSubscriptionRepository.findAll();
         LocalDate today = LocalDate.now();
 
         for (UserSubscription subscription : subscriptions) {
@@ -266,7 +266,7 @@ public class UserSubscriptionService {
                 );
 
                 subscription.setRenewalEmailSent(true);
-                subscriptionRepository.save(subscription);
+                UserSubscriptionRepository.save(subscription);
             }
 
 
@@ -284,7 +284,7 @@ public class UserSubscriptionService {
                     subscription.setExpiryEmailSent(true);
                 }
 
-                subscriptionRepository.save(subscription);
+                UserSubscriptionRepository.save(subscription);
                 userRepository.save(subscription.getUser());
             }
         }
@@ -297,11 +297,11 @@ public class UserSubscriptionService {
         }
 
 
-        List<UserSubscription> subscriptions = subscriptionRepository.findUserSubscriptionsByUser(user);
+        List<UserSubscription> subscriptions = UserSubscriptionRepository.findUserSubscriptionsByUser(user);
 
         List<HistorySubscription> history = new ArrayList<>();
         for (UserSubscription s : subscriptions) {
-            Payment payment = paymentRepository.findPaymentByUserSubscription(s);
+            SubscriptionPayment payment = subscriptionPaymentRepository.findPaymentByUserSubscription(s);
             if (payment == null) {
                 throw new ApiException("payment not found");
             }
@@ -323,7 +323,7 @@ public class UserSubscriptionService {
 
         Map<String, Object> dashboard = new HashMap<>();
 
-        UserSubscription current = subscriptionRepository.findUserSubscriptionById(userId);
+        UserSubscription current = UserSubscriptionRepository.findUserSubscriptionById(userId);
         if (current != null) {
             Map<String, Object> currentPlan = new HashMap<>();
             currentPlan.put("planType", current.getPlanType());
@@ -340,7 +340,7 @@ public class UserSubscriptionService {
         List<HistorySubscription> history = historyOfSubscription(userId);
         dashboard.put("subscriptionHistory", history);
 
-        List<UserSubscription> allSubscriptions = subscriptionRepository.findUserSubscriptionsByUser(user);
+        List<UserSubscription> allSubscriptions = UserSubscriptionRepository.findUserSubscriptionsByUser(user);
 
         Double totalSpent = allSubscriptions.stream()
                 .filter(sub -> !"FREE".equalsIgnoreCase(sub.getPlanType()))
