@@ -194,4 +194,25 @@ public class CompanyController {
         String result = companyService.maintenancePlan(user, requestId);
         return ResponseEntity.status(200).body(result);
     }
+
+    @PostMapping("/report-writing")
+    public ResponseEntity<?> workerReportCreationAssistant(@AuthenticationPrincipal User user, @RequestBody @Valid DescriptionDTOIn dto) {
+        return ResponseEntity.status(200).body(companyService.workerReportCreationAssistant(user, dto));
+    }
+
+    @PostMapping("/inspection/planning")
+    public ResponseEntity<?> companyInspectionPlanningAssistant(@AuthenticationPrincipal User user, @RequestBody @Valid DescriptionDTOIn dto) {
+        return ResponseEntity.status(200).body(companyService.companyInspectionPlanningAssistant(user, dto));
+    }
+
+    @PostMapping("/moving/time-advice")
+    public ResponseEntity<?> movingCompanyTimeAdvice(@AuthenticationPrincipal User user, @RequestBody @Valid DescriptionDTOIn dto) {
+        return ResponseEntity.status(200).body(companyService.movingCompanyTimeAdvice(user, dto));
+    }
+
+    @PostMapping("/maintenance/fix-or-replace")
+    public ResponseEntity<?> maintenanceFixOrReplace(@AuthenticationPrincipal User user, @RequestBody @Valid DescriptionDTOIn dto) {
+        return ResponseEntity.status(200).body(companyService.maintenanceFixOrReplace(user, dto));
+    }
+
 }

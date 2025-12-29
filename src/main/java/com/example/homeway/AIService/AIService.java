@@ -149,7 +149,7 @@ public class AIService {
         return askChat(prompt);
     }
 
-    public String movingCompanyMovingEstimation(String input) {
+    public String movingCompanyResourceMovingEstimation(String input) {
         String prompt = """
                 You are a moving operations planner.
                 Based on the move description, estimate ONLY:
@@ -249,6 +249,8 @@ public class AIService {
                          - Use time ranges (e.g., "2–4 hours", "1–3 days", "1–2 weeks").
                          - If details are missing, state assumptions briefly.
                          - Keep the answer short: 5–8 sentences maximum.
+                         - careful not to duplicate answers or a category
+                         - If the issue is not related to moving do not mention Moving (example: i have a broken pipe, moving isn't relevant)
                          - Do NOT mention pricing or cost.
                          - Do NOT mention policy or system text.
                 
@@ -399,18 +401,29 @@ public class AIService {
     // 1) Before creating request: what service fits?
     public String customerAskAIWhatServiceDoesTheIssueFits(String input) {
         String prompt = """
-                You are a home services assistant for a platform that offers:
-                (1) Inspection, (2) Maintenance, (3) Redesign, (4) Moving.
-                In 5-8 sentences, decide what the customer needs.
-
-                Customer issue: %s
-
+                You are a home-services triage assistant for a platform that offers:
+                - INSPECTION (diagnose, assess safety/structure, document findings)
+                - MAINTENANCE (repair/replace/fix functional issues)
+                - REDESIGN (cosmetic/layout improvements; optional)
+                
+                Task:
+                Decide what the customer should request FIRST.
+                Be short: 5-8 sentences maximum.
+                
+                Input from customer:
+                %s
+                
                 Rules:
-                - If safety/structural/electrical/plumbing risk is mentioned, recommend Inspection first.
-                - If it is a simple fix (leak, broken part, AC not cooling, appliance issue), recommend Maintenance.
-                - If the customer wants a new layout/style/renovation, recommend Redesign.
-                - If the request is about relocating items/house move, recommend Moving.
-                - End with: "Recommended service: X" (one service only).
+                - If the issue could be structural/safety/hidden damage, recommend INSPECTION first.
+                - If it is a clear/simple functional problem (leak, broken outlet, AC not cooling), MAINTENANCE may be enough.
+                - REDESIGN is only recommended if the user explicitly wants aesthetics, layout change, or upgrades.
+                - If unsure, choose INSPECTION first.
+                - Moving isn't included.
+                
+                Output format:
+                1) Recommended service (Inspection / Maintenance / Redesign)
+                2) Why (2-3 short reasons)
+                3) What the customer should prepare (1-2 items)
                 """.formatted(input);
 
         return askChat(prompt);
@@ -419,16 +432,24 @@ public class AIService {
     // 2) Cheaper: fix vs redesign
     public String customerIsFixOrDesignCheaper(String input) {
         String prompt = """
-                You are a cost-awareness assistant for home issues.
-                In 5-8 sentences, predict whether fixing is likely cheaper than redesigning, and explain why.
-
-                Issue description: %s
-
+                You are a cost-estimation assistant for home issues.
+                The customer describes an issue; you must estimate whether it is LIKELY cheaper to FIX (maintenance) or to REDESIGN.
+                Be short: 5-8 sentences maximum.
+                
+                Customer input:
+                %s
+                
                 Rules:
-                - If the problem is localized/small scope, lean "Fix is cheaper".
-                - If multiple rooms/major damage/old infrastructure is involved, lean "Redesign might be better long-term".
-                - Mention uncertainty and what extra details would change the estimate (materials, area size, severity).
-                - End with: "Likely cheaper: FIX" or "Likely cheaper: REDESIGN".
+                - If the issue is isolated and functional (single item broken), FIX is likely cheaper.
+                - If multiple areas are affected, repeated repairs, or the customer wants upgrades/modern look, REDESIGN may be worth it.
+                - Mention uncertainty: "likely" not guaranteed; recommend inspection if hidden damage is possible.
+                - Provide 2 cost drivers (what makes it cheaper/more expensive).
+                
+                Output format:
+                - Likely cheaper option: FIX or REDESIGN
+                - Why (2 points)
+                - Key cost drivers (2 bullets)
+                - Quick next step (1 sentence)
                 """.formatted(input);
 
         return askChat(prompt);
@@ -437,19 +458,25 @@ public class AIService {
     // 3) Worker report writing assistant (bullet points -> professional report)
     public String workerReportCreationAssistant(String input) {
         String prompt = """
-                You are a professional report writing assistant for field workers.
-                Convert the worker notes into a clear, professional report.
-                Keep it structured and remove ambiguity.
-
-                Worker notes (bullet points / rough notes): %s
-
-                Report format:
-                - Title
-                - Summary (2-3 lines)
-                - Findings (bullets)
-                - Recommended Actions (bullets)
-                - Risks / Safety Notes (if any)
-                - Next Steps
+                You are a professional report writing assistant for a field worker.
+                Convert the input bullet points into a clear professional report.
+                Remove ambiguity, improve clarity, but do NOT invent facts.
+                Be short and useful.
+                
+                Worker notes / bullet points:
+                %s
+                
+                Output format:
+                Title: (short)
+                Summary: (2-3 sentences)
+                Findings: (bulleted list)
+                Recommendations: (bulleted list)
+                Next actions: (1-3 bullets)
+                
+                Rules:
+                - Keep it objective and professional.
+                - If something is unclear, add a "Need Clarification" bullet at the end.
+                - No extra fluff.
                 """.formatted(input);
 
         return askChat(prompt);
@@ -459,16 +486,33 @@ public class AIService {
     public String companyInspectionPlanningAssistant(String input) {
         String prompt = """
                 You are an inspection planning assistant.
-                Create a practical inspection checklist and prioritize risk areas.
-                Be short and actionable (5-10 bullets).
-
-                Inspection description from request: %s
-
+                The inspector provides a request/issue description.
+                Create an inspection checklist and prioritize the highest risk areas first.
+                Be short: 5-8 sentences maximum + checklist.
+                
+                Input:
+                %s
+                
                 Mention:
-                - Priority order (High/Medium/Low)
-                - Tools needed (if obvious)
-                - Red flags to look for
-                - What photos/evidence to capture
+                - Safety risks to check first
+                - Tools or measurements needed (basic)
+                - Checklist grouped by priority (High / Medium / Low)
+                - What evidence to capture (photos/notes)
+                
+                Rules:
+                - If structural/electrical/gas/water risk appears, prioritize it as HIGH.
+                - Do not claim certainty; phrase as "check/verify".
+                
+                Output format:
+                Priority checks:
+                HIGH:
+                - ...
+                MEDIUM:
+                - ...
+                LOW:
+                - ...
+                Evidence to capture:
+                - ...
                 """.formatted(input);
 
         return askChat(prompt);
@@ -478,16 +522,21 @@ public class AIService {
     public String movingCompanyTimeAdvice(String cityAndTime) {
         String prompt = """
                 You are a moving logistics assistant.
-                In 5-8 sentences, suggest the best moving time and what to consider.
-
-                Input (city + time window + any constraints): %s
-
+                Based on the provided city and time window (and any details), suggest the best moving time and traffic considerations.
+                Be short: 5-8 sentences maximum.
+                
+                Input:
+                %s
+                
                 Mention:
-                - Best suggested time range
-                - Traffic considerations
-                - Weather/heat considerations if relevant
-                - Parking/building access tips
-                - A short checklist for the customer
+                - Best time windows (early morning / late night / weekday vs weekend)
+                - Traffic/parking/loading considerations
+                - One backup plan suggestion (if traffic is bad)
+                - Safety and elevator/building coordination tip
+                
+                Rules:
+                - Do not claim real-time traffic data.
+                - Speak in practical general guidance.
                 """.formatted(cityAndTime);
 
         return askChat(prompt);
@@ -496,16 +545,21 @@ public class AIService {
     // 6) Maintenance: repair vs replace advice
     public String maintenanceFixOrReplace(String input) {
         String prompt = """
-                You are a maintenance technician assistant.
-                In 5-8 sentences, advise whether to repair or replace, and why.
-
-                Issue description: %s
-
+                You are a maintenance decision assistant.
+                Based on the issue description, advise whether to REPAIR (fix) or REPLACE.
+                Be short: 5-8 sentences maximum.
+                
+                Input:
+                %s
+                
                 Mention:
-                - Age/condition clues (if missing, say what you need)
-                - Safety and reliability
-                - Cost vs longevity tradeoff
-                - End with: "Recommendation: REPAIR" or "Recommendation: REPLACE"
+                - Which option is better and why
+                - 2 decision factors (age/condition, safety, cost, availability, frequency of failure)
+                - If inspection is needed first, say it
+                
+                Rules:
+                - Do not invent prices.
+                - If safety risk exists (electrical/gas/water major leak), recommend inspection/safety check first.
                 """.formatted(input);
 
         return askChat(prompt);

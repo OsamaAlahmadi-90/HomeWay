@@ -175,7 +175,7 @@ public class CustomerService {
         return aiService.customerReviewWritingAssist(dto.getNotes(), dto.getTone());
     }
 
-    public String customerRequestCostEstimation(User user, String description) {
+    public String customerRequestCostEstimation(User user, DescriptionDTOIn dto) {
 
         if (user == null) throw new ApiException("unauthorized");
 
@@ -186,6 +186,7 @@ public class CustomerService {
             throw new ApiException("You must be subscribed to use AI features");
         }
 
+        String description = dto.getDescription();
         if (description == null || description.isBlank()) {
             throw new ApiException("description is empty");
         }

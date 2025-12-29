@@ -58,6 +58,21 @@ public class CustomerController {
         return ResponseEntity.status(200).body(result);
     }
 
+    @PostMapping("/cost-estimation")
+    public ResponseEntity<?> customerRequestCostEstimation(@AuthenticationPrincipal User user, @RequestBody @Valid DescriptionDTOIn dto) {
+        return ResponseEntity.status(200).body(customerService.customerRequestCostEstimation(user, dto));
+    }
+
+    @PostMapping("/service-fit")
+    public ResponseEntity<?> customerAskAIWhatServiceDoesTheIssueFits(@AuthenticationPrincipal User user, @RequestBody @Valid DescriptionDTOIn dto) {
+        return ResponseEntity.status(200).body(customerService.customerAskAIWhatServiceDoesTheIssueFits(user, dto));
+    }
+
+    @PostMapping("/fix-vs-redesign")
+    public ResponseEntity<?> customerIsFixOrDesignCheaper(@AuthenticationPrincipal User user, @RequestBody @Valid DescriptionDTOIn dto) {
+        return ResponseEntity.status(200).body(customerService.customerIsFixOrDesignCheaper(user, dto));
+    }
+
     //Extra endpoints
     @PutMapping("/offer/accept/{offerId}")
     public ResponseEntity<?> acceptOffer(@AuthenticationPrincipal User user, @PathVariable Integer offerId) {
