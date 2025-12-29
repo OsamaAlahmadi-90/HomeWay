@@ -1,5 +1,8 @@
 package com.example.homeway.Service;
 
+import com.example.homeway.AIService.AIService;
+import com.example.homeway.DTO.Ai.DescriptionDTOIn;
+import com.example.homeway.DTO.Ai.RepairChecklistDTOIn;
 import com.example.homeway.DTO.In.CompanyDTOIn;
 import com.example.homeway.DTO.In.CompanyStatusDTOIn;
 import com.example.homeway.DTO.Out.CompanyDTOOut;
@@ -24,7 +27,7 @@ public class CompanyService {
     private final VehicleRepository vehicleRepository;
     private final OfferRepository offerRepository;
     private final NotificationRepository notificationRepository;
-
+    private final AIService aiService;
 
     public List<CompanyDTOOut> getAllCompanies() {
         List<CompanyDTOOut> outs = new ArrayList<>();
@@ -915,6 +918,268 @@ public class CompanyService {
         notification.setCustomer(customer);
 
         notificationRepository.save(notification);
+    }
+
+    //ai
+    public String generateRepairChecklist(User user, RepairChecklistDTOIn dto) {
+
+        if (user == null) {
+            throw new ApiException("unauthorized");
+        }
+
+        if (user.getWorker() == null) {
+            throw new ApiException("worker profile not found");
+        }
+
+        if (!Boolean.TRUE.equals(user.getIsSubscribed())) {
+            throw new ApiException("You must be subscribed to use AI features");
+        }
+
+        if (!user.getWorker().getIsActive()) {
+            throw new ApiException("worker is not active");
+        }
+
+        return aiService.workerRepairChecklist(dto.getIssueDescription());
+    }
+
+    public String getWorkerSafetyRequirements(User user, DescriptionDTOIn dto) {
+
+        if (user == null) {
+            throw new ApiException("unauthorized");
+        }
+
+        if (user.getWorker() == null) {
+            throw new ApiException("worker profile not found");
+        }
+
+        if (!Boolean.TRUE.equals(user.getIsSubscribed())) {
+            throw new ApiException("You must be subscribed to use AI features");
+        }
+
+        if (!user.getWorker().getIsActive()) {
+            throw new ApiException("worker is not active");
+        }
+
+        return aiService.workerSafetyRequirements(dto.getDescription());
+
+    }
+
+    public String companyServiceEstimationCost(User user, Integer requestId) {
+
+        if (user == null) {
+            throw new ApiException("unauthorized");
+        }
+
+        if (!Boolean.TRUE.equals(user.getIsSubscribed())) {
+            throw new ApiException("You must be subscribed to use AI features");
+        }
+
+        Request request = requestRepository.findRequestById(requestId);
+        if (request == null) {
+            throw new ApiException("request not found with id: " + requestId);
+        }
+
+
+         if (!request.getCompany().getId().equals(user.getCompany().getId())) {
+             throw new ApiException("request does not belong to your company");
+         }
+
+        if (request.getDescription() == null || request.getDescription().isBlank()) {
+            throw new ApiException("request description is empty");
+        }
+
+        return aiService.companyServiceEstimationCost(request.getDescription());
+    }
+
+    //Spare Parts Estimator
+    public String sparePartsEstimator(User user, String description) {
+
+        if (user == null) {
+            throw new ApiException("unauthorized");
+        }
+
+        if (!Boolean.TRUE.equals(user.getIsSubscribed())) {
+            throw new ApiException("You must be subscribed to use AI features");
+        }
+
+        Worker worker = user.getWorker();
+        if (worker == null) {
+            throw new ApiException("worker profile not found");
+        }
+
+        if (!Boolean.TRUE.equals(worker.getIsActive())) {
+            throw new ApiException("worker is not active");
+        }
+
+        Company company = worker.getCompany();
+        if (company == null) {
+            throw new ApiException("company profile not found");
+        }
+
+        if (!"MAINTENANCE_COMPANY".equalsIgnoreCase(company.getUser().getRole())) {
+            throw new ApiException("only maintenance company can use this feature");
+        }
+
+        if (description == null || description.isBlank()) {
+            throw new ApiException("description is empty");
+        }
+
+        return aiService.maintenanceCompanySparePartsCosts(description);
+    }
+
+    //Issue Diagnosis Assistant
+    public String issueDiagnosisAssistant(User user, String description) {
+
+        if (user == null) {
+            throw new ApiException("unauthorized");
+        }
+
+        if (!Boolean.TRUE.equals(user.getIsSubscribed())) {
+            throw new ApiException("You must be subscribed to use AI features");
+        }
+
+        Worker worker = user.getWorker();
+        if (worker == null) {
+            throw new ApiException("worker profile not found");
+        }
+
+        if (!Boolean.TRUE.equals(worker.getIsActive())) {
+            throw new ApiException("worker is not active");
+        }
+
+        if (description == null || description.isBlank()) {
+            throw new ApiException("description is empty");
+        }
+
+        return aiService.workerIssueDiagnosis(description);
+    }
+
+    //smart move planner
+    public String smartMovePlanner(User user, Integer requestId) {
+
+        if (user == null) {
+            throw new ApiException("unauthorized");
+        }
+
+        if (!Boolean.TRUE.equals(user.getIsSubscribed())) {
+            throw new ApiException("You must be subscribed to use AI features");
+        }
+
+        Worker worker = user.getWorker();
+        if (worker == null) {
+            throw new ApiException("worker profile not found");
+        }
+
+        if (!Boolean.TRUE.equals(worker.getIsActive())) {
+            throw new ApiException("worker is not active");
+        }
+
+        Company company = worker.getCompany();
+        if (company == null) {
+            throw new ApiException("company profile not found");
+        }
+
+        if (!"MOVING_COMPANY".equalsIgnoreCase(company.getUser().getRole())) {
+            throw new ApiException("only moving company can use this feature");
+        }
+
+        Request request = requestRepository.findRequestById(requestId);
+        if (request == null) {
+            throw new ApiException("request not found with id: " + requestId);
+        }
+
+        if (!"moving".equalsIgnoreCase(request.getType())) {
+            throw new ApiException("this request is not a moving request");
+        }
+
+        if (request.getCompany() == null ||
+                !request.getCompany().getId().equals(company.getId())) {
+            throw new ApiException("request does not belong to your company");
+        }
+
+        String description = request.getDescription();
+        if (description == null || description.isBlank()) {
+            throw new ApiException("request description is empty");
+        }
+
+        return aiService.movingCompanyMovingEstimation(description);
+    }
+
+    //time estimation helper
+    public String timeEstimationHelper(User user, String description) {
+
+        if (user == null) {
+            throw new ApiException("unauthorized");
+        }
+
+        if (!Boolean.TRUE.equals(user.getIsSubscribed())) {
+            throw new ApiException("You must be subscribed to use AI features");
+        }
+
+        Worker worker = user.getWorker();
+        if (worker == null) {
+            throw new ApiException("worker profile not found");
+        }
+
+        if (!Boolean.TRUE.equals(worker.getIsActive())) {
+            throw new ApiException("worker is not active");
+        }
+
+        if (description == null || description.isBlank()) {
+            throw new ApiException("description is empty");
+        }
+
+        return aiService.workerJobTimeEstimation(description);
+    }
+
+    //Maintenance plan generator
+    public String maintenancePlan(User user, Integer requestId) {
+
+        if (user == null) {
+            throw new ApiException("unauthorized");
+        }
+
+        if (!Boolean.TRUE.equals(user.getIsSubscribed())) {
+            throw new ApiException("You must be subscribed to use AI features");
+        }
+
+        Worker worker = user.getWorker();
+        if (worker == null) {
+            throw new ApiException("worker profile not found");
+        }
+
+        if (!Boolean.TRUE.equals(worker.getIsActive())) {
+            throw new ApiException("worker is not active");
+        }
+
+        Company company = worker.getCompany();
+        if (company == null) {
+            throw new ApiException("company profile not found");
+        }
+
+        if (!"MAINTENANCE_COMPANY".equalsIgnoreCase(company.getUser().getRole())) {
+            throw new ApiException("only maintenance company can use this feature");
+        }
+
+        Request request = requestRepository.findRequestById(requestId);
+        if (request == null) {
+            throw new ApiException("request not found with id: " + requestId);
+        }
+
+        if (!"maintenance".equalsIgnoreCase(request.getType())) {
+            throw new ApiException("this request is not a maintenance request");
+        }
+
+        if (request.getCompany() == null || !request.getCompany().getId().equals(company.getId())) {
+            throw new ApiException("request does not belong to your company");
+        }
+
+        String description = request.getDescription();
+        if (description == null || description.isBlank()) {
+            throw new ApiException("request description is empty");
+        }
+
+        return aiService.maintenanceCompanyMaintenancePlan(description);
     }
 
     public CompanyDTOOut convertToDTO(Company company) {

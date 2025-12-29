@@ -1,12 +1,14 @@
 package com.example.homeway.Service;
 
+import com.example.homeway.AIService.AIService;
 import com.example.homeway.API.ApiException;
+import com.example.homeway.DTO.Ai.RepairChecklistDTOIn;
+import com.example.homeway.DTO.Ai.ReviewAssistDTOIn;
 import com.example.homeway.DTO.In.CustomerDTOIn;
-import com.example.homeway.Model.Customer;
-import com.example.homeway.Model.Offer;
-import com.example.homeway.Model.Request;
-import com.example.homeway.Model.User;
+import com.example.homeway.Model.*;
 import com.example.homeway.Repository.OfferRepository;
+import com.example.homeway.Repository.ReportRepository;
+import com.example.homeway.Repository.RequestRepository;
 import com.example.homeway.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,10 @@ public class CustomerService {
 
     private final UserRepository userRepository;
     private  final OfferRepository offerRepository;
+    private final RequestRepository requestRepository;
+    private final ReportRepository reportRepository;
+    private final AIService aiService;
+
 
     public Customer getMyCustomer(User user) {
         if (user == null) {
@@ -109,6 +115,155 @@ public class CustomerService {
         offer.setStatus("REJECTED");
         offerRepository.save(offer);
     }
+
+    public String getTimelineEstimator(User user, Integer requestId) {
+
+        if (user == null){
+            throw new ApiException("unauthorized");
+        }
+
+        Customer customer = user.getCustomer();
+        if (customer == null){
+            throw new ApiException("customer profile not found");
+        }
+
+        if (!Boolean.TRUE.equals(user.getIsSubscribed())) {
+            throw new ApiException("You must be subscribed to use AI features");
+        }
+
+        Request request = requestRepository.findRequestById(requestId);
+        if (request == null) {
+            throw new ApiException("request not found with id: " + requestId);
+        }
+
+        if (request.getCustomer() == null || !request.getCustomer().getId().equals(customer.getId())) {
+            throw new ApiException("request does not belong to you");
+        }
+
+        String description = request.getDescription();
+        if (description == null || description.isBlank()) {
+            throw new ApiException("request description is empty");
+        }
+
+        return aiService.customerServicesTimeEstimation(description);
+    }
+
+    public String customerReviewWritingAssist(User user, Integer requestId, ReviewAssistDTOIn dto) {
+
+        if (user == null) {
+            throw new ApiException("unauthorized");
+        }
+
+        if (!Boolean.TRUE.equals(user.getIsSubscribed())) {
+            throw new ApiException("You must be subscribed to use AI features");
+        }
+
+        Request request = requestRepository.findRequestById(requestId);
+        if (request == null) {
+            throw new ApiException("request not found with id: " + requestId);
+        }
+
+        if (request.getCustomer() == null || !request.getCustomer().getId().equals(user.getId())) {
+            throw new ApiException("request does not belong to you");
+        }
+
+//        if (!request.getStatus().equalsIgnoreCase("completed")) {
+//            throw new ApiException("you can only write a review after request completion");
+//        }
+
+        return aiService.customerReviewWritingAssist(dto.getNotes(), dto.getTone());
+    }
+
+    public String customerRequestCostEstimation(User user, String description) {
+
+        if (user == null) throw new ApiException("unauthorized");
+
+        Customer customer = user.getCustomer();
+        if (customer == null) throw new ApiException("customer profile not found");
+
+        if (!Boolean.TRUE.equals(user.getIsSubscribed())) {
+            throw new ApiException("You must be subscribed to use AI features");
+        }
+
+        if (description == null || description.isBlank()) {
+            throw new ApiException("description is empty");
+        }
+
+        return aiService.customerRequestCostEstimation(description);
+    }
+
+    public String customerReportSummary(User user, Integer reportId) {
+
+        if (user == null) {
+            throw new ApiException("unauthorized");
+        }
+
+        Customer customer = user.getCustomer();
+        if (customer == null) {
+            throw new ApiException("customer profile not found");
+        }
+
+        if (!Boolean.TRUE.equals(user.getIsSubscribed())) {
+            throw new ApiException("You must be subscribed to use AI features");
+        }
+
+        Report report = reportRepository.findReportById(reportId);
+        if (report == null) {
+            throw new ApiException("report not found with id: " + reportId);
+        }
+
+        Request request = report.getRequest();
+        if (request == null) {
+            throw new ApiException("report is not linked to a request");
+        }
+
+        if (request.getCustomer() == null ||
+                !request.getCustomer().getId().equals(customer.getId())) {
+            throw new ApiException("report does not belong to your request");
+        }
+
+        String description = report.getFindings();
+        if (description == null || description.isBlank()) {
+            throw new ApiException("report description is empty");
+        }
+
+        return aiService.customerReportSummary(description);
+    }
+
+    public String redesignScopeGenerator(User user, Integer requestId) {
+
+        if (user == null) throw new ApiException("unauthorized");
+
+        Customer customer = user.getCustomer();
+        if (customer == null){
+            throw new ApiException("customer profile not found");
+        }
+
+        if (!Boolean.TRUE.equals(user.getIsSubscribed())) {
+            throw new ApiException("You must be subscribed to use AI features");
+        }
+
+        Request request = requestRepository.findRequestById(requestId);
+        if (request == null) {
+            throw new ApiException("request not found with id: " + requestId);
+        }
+
+        if (request.getCustomer() == null || !request.getCustomer().getId().equals(customer.getId())) {
+            throw new ApiException("request does not belong to you");
+        }
+
+        if (request.getType() == null || !request.getType().equalsIgnoreCase("REDESIGN")) {
+            throw new ApiException("this request is not a redesign request");
+        }
+
+        String description = request.getDescription();
+        if (description == null || description.isBlank()) {
+            throw new ApiException("request description is empty");
+        }
+
+        return aiService.redesignCompanyRedesignScope(description);
+    }
+
 }
 
 

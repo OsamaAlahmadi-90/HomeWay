@@ -1,5 +1,6 @@
 package com.example.homeway.Controller;
 import com.example.homeway.API.ApiResponse;
+import com.example.homeway.DTO.Ai.ReviewAssistDTOIn;
 import com.example.homeway.DTO.In.CustomerDTOIn;
 import com.example.homeway.Model.User;
 import com.example.homeway.Service.CustomerService;
@@ -32,4 +33,27 @@ public class CustomerController {
         customerService.deleteMyCustomer(user);
         return ResponseEntity.status(200).body(new ApiResponse("Customer deleted successfully"));
     }
+
+    @GetMapping("/ai/ServiceEstimator/{requestId}")
+    public ResponseEntity<?> customerTimelineEstimator(@AuthenticationPrincipal User user, @PathVariable Integer requestId){
+        String result = customerService.getTimelineEstimator(user, requestId);
+        return ResponseEntity.status(200).body(result);
+    }
+
+    @PostMapping("/review-assist/{requestId}")
+    public ResponseEntity<?> reviewAssist(@AuthenticationPrincipal User user, @PathVariable Integer requestId,@RequestBody @Valid ReviewAssistDTOIn dto) {
+        return ResponseEntity.status(200).body(customerService.customerReviewWritingAssist(user, requestId, dto));
+    }
+
+    @GetMapping("/customer/report-summary/{reportId}")
+    public ResponseEntity<?> customerReportSummary(@AuthenticationPrincipal User user, @PathVariable Integer reportId) {
+        return ResponseEntity.status(200).body(customerService.customerReportSummary(user, reportId));
+    }
+
+    @GetMapping("/redesign-scope/{requestId}")
+    public ResponseEntity<?> redesignScope(@AuthenticationPrincipal User user, @PathVariable Integer requestId) {
+        String result = customerService.redesignScopeGenerator(user, requestId);
+        return ResponseEntity.status(200).body(result);
+    }
+
 }

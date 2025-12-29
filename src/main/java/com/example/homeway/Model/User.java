@@ -55,7 +55,7 @@ public class User implements UserDetails {
     private String role;
 
     @Column(columnDefinition = "Boolean default false")
-    private Boolean isSubscribed;
+    private Boolean isSubscribed = false;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
     @PrimaryKeyJoinColumn

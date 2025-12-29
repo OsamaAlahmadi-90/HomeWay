@@ -2,6 +2,7 @@ package com.example.homeway.Service;
 
 import com.example.homeway.API.ApiException;
 import com.example.homeway.DTO.In.NotificationDTOIn;
+import com.example.homeway.EmailService.EmailService;
 import com.example.homeway.Model.Company;
 import com.example.homeway.Model.Customer;
 import com.example.homeway.Model.Notification;
@@ -22,6 +23,8 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final CompanyRepository companyRepository;
     private final CustomerRepository customerRepository;
+    private final EmailService emailService;
+
     // =====================================
     // ADMIN
     // Get ALL notifications
