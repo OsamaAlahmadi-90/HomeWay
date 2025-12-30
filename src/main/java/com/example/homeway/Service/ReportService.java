@@ -92,7 +92,7 @@ public class ReportService {
         if (request == null) throw new ApiException("Request not found");
 
         //checks if request is completed
-        if(!request.getStatus().equalsIgnoreCase("completed")){
+        if(!request.getStatus().equalsIgnoreCase("in_progress")){
             throw new ApiException("Report can only be created if request is completed");
         }
 
