@@ -282,32 +282,70 @@
 <hr />
 
 <h2 id="contributors">8. Contributors</h2>
+
+<h3><a href="https://github.com/Turki1927">@Turki1927</a></h3>
+<p><strong>Backend Development:</strong></p>
 <ul>
-  <li>
-    <a href="https://github.com/Turki1927">@Turki1927</a> —
-    Property, Worker, Admin, Notifications, SubscriptionPaymentService, UserSubscriptionService. 
-    Request (Maintenance Flow). Request (Redesign Flow). JUnit Test (Service). Postman Testing (Local/deployment testing). 
-    Figma Initial Design. Class Diagram. 
-    External APIs: Subscription payment (Moyasar payment), Email Integration (Subscription/Notifications), 
-    AI endpoints (customerServicesTimeEstimation, customerReviewWritingAssist, workerRepairChecklist, 
-    workerSafetyRequirements, companyServiceEstimationCost, maintenanceCompanySparePartsCosts).
-  </li>
-  <li>
-    <a href="https://github.com/leenref">@leenref</a> —
-    Report, Vehicle, Customer, RequestPaymentService. Request (Moving Flow). JUnit Test (Controller). 
-    Postman Testing (Local/deployment testing). Deployment. Postman Documentation. Figma Initial Design. Class Diagram. 
-    External APIs: Service payment (Moyasar payment), AI endpoints (customerAskAIWhatServiceDoesTheIssueFits, 
-    customerIsFixOrDesignCheaper, workerReportCreationAssistant, companyInspectionPlanningAssistant, 
-    movingCompanyTimeAdvice, maintenanceFixOrReplace).
-  </li>
-  <li>
-    <a href="https://github.com/OsamaAlahmadi-90">@OsamaAlahmadi-90</a> —
-    User, Offer, UserRegister, Review, Company. Request (Inspection Flow). JUnit Test (Repository). 
-    Postman Testing (Local/deployment testing). Figma Final Design. Class Diagram. Use Case diagram. Presentation. 
-    External APIs: Email integration (Company/Customer Requests), AI endpoints (customerRequestCostEstimation, 
-    customerReportSummary, workerIssueDiagnosis, movingCompanyResourceMovingEstimation, workerJobTimeEstimation, 
-    maintenanceCompanyMaintenancePlan, redesignCompanyRedesignScope, customerRedesignFromImage, companyIssueImageDiagnosis).
-  </li>
+  <li>Property, Worker, Admin entities</li>
+  <li>Notifications system</li>
+  <li>SubscriptionPaymentService, UserSubscriptionService</li>
+  <li>Request flows: Maintenance &amp; Redesign</li>
+</ul>
+<p><strong>Testing &amp; Design:</strong></p>
+<ul>
+  <li>JUnit Test (Service layer)</li>
+  <li>Postman Testing (Local/deployment)</li>
+  <li>Figma Initial Design</li>
+  <li>Class Diagram</li>
+</ul>
+<p><strong>External APIs:</strong></p>
+<ul>
+  <li>Subscription payment integration (Moyasar)</li>
+  <li>Email Integration (Subscription/Notifications)</li>
+  <li>AI endpoints: customerServicesTimeEstimation, customerReviewWritingAssist, workerRepairChecklist, workerSafetyRequirements, companyServiceEstimationCost, maintenanceCompanySparePartsCosts</li>
+</ul>
+
+<h3><a href="https://github.com/leenref">@leenref</a></h3>
+<p><strong>Backend Development:</strong></p>
+<ul>
+  <li>Report, Vehicle, Customer entities</li>
+  <li>RequestPaymentService</li>
+  <li>Request flow: Moving</li>
+</ul>
+<p><strong>Testing &amp; Documentation:</strong></p>
+<ul>
+  <li>JUnit Test (Controller layer)</li>
+  <li>Postman Testing (Local/deployment)</li>
+  <li>Postman Documentation</li>
+  <li>Figma Initial Design</li>
+  <li>Class Diagram</li>
+</ul>
+<p><strong>Deployment &amp; External APIs:</strong></p>
+<ul>
+  <li>Platform Deployment</li>
+  <li>Service payment integration (Moyasar)</li>
+  <li>AI endpoints: customerAskAIWhatServiceDoesTheIssueFits, customerIsFixOrDesignCheaper, workerReportCreationAssistant, companyInspectionPlanningAssistant, movingCompanyTimeAdvice, maintenanceFixOrReplace</li>
+</ul>
+
+<h3><a href="https://github.com/OsamaAlahmadi-90">@OsamaAlahmadi-90</a></h3>
+<p><strong>Backend Development:</strong></p>
+<ul>
+  <li>User, Offer, UserRegister, Review, Company entities</li>
+  <li>Request flow: Inspection</li>
+</ul>
+<p><strong>Testing &amp; Design:</strong></p>
+<ul>
+  <li>JUnit Test (Repository layer)</li>
+  <li>Postman Testing (Local/deployment)</li>
+  <li>Figma Final Design</li>
+  <li>Class Diagram</li>
+  <li>Use Case Diagram</li>
+  <li>Project Presentation</li>
+</ul>
+<p><strong>External APIs:</strong></p>
+<ul>
+  <li>Email integration (Company/Customer Requests)</li>
+  <li>AI endpoints: customerRequestCostEstimation, customerReportSummary, workerIssueDiagnosis, movingCompanyResourceMovingEstimation, workerJobTimeEstimation, maintenanceCompanyMaintenancePlan, redesignCompanyRedesignScope, customerRedesignFromImage, companyIssueImageDiagnosis</li>
 </ul>
 
 <p><a href="#top">↑ Back to top</a></p>
