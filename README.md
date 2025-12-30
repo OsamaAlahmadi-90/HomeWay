@@ -1,362 +1,585 @@
-HomeWay README (HTML Page with English/Arabic Toggle)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomeWay README</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #24292e;
+        }
+        .language-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .language-toggle button {
+            padding: 10px 20px;
+            margin: 0 5px;
+            cursor: pointer;
+            border: 2px solid #333;
+            background: white;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        .language-toggle button:hover {
+            background: #f6f8fa;
+        }
+        .language-toggle button.active {
+            background: #333;
+            color: white;
+        }
+        .lang-content {
+            display: none;
+        }
+        .lang-content.active {
+            display: block;
+        }
+        .rtl {
+            direction: rtl;
+            text-align: right;
+        }
+        h1 {
+            border-bottom: 2px solid #eaecef;
+            padding-bottom: 10px;
+        }
+        h2 {
+            border-bottom: 1px solid #eaecef;
+            padding-bottom: 8px;
+            margin-top: 24px;
+        }
+        h3 {
+            margin-top: 20px;
+        }
+        code {
+            background: #f6f8fa;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        a {
+            color: #0366d6;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        ul, ol {
+            padding-left: 30px;
+        }
+        hr {
+            border: 0;
+            border-top: 1px solid #eaecef;
+            margin: 24px 0;
+        }
+    </style>
+</head>
+<body>
 
-────────────────────────────────────────────────────────────
-Document Type
-────────────────────────────────────────────────────────────
-- Full HTML page (<!DOCTYPE html> … </html>)
-- Includes inline CSS + a language toggle (English / العربية)
-- Contains two content sections:
-  1) English (content-en)
-  2) Arabic (content-ar) with RTL styling
-- Includes a JavaScript function switchLanguage(lang) to toggle visibility
+<div class="language-toggle">
+    <button onclick="switchLanguage('en')" id="btn-en" class="active">English</button>
+    <button onclick="switchLanguage('ar')" id="btn-ar">العربية</button>
+</div>
 
-────────────────────────────────────────────────────────────
-HTML Structure (Organized Outline)
-────────────────────────────────────────────────────────────
+<!-- English Content -->
+<div id="content-en" class="lang-content active">
 
-1) Document Header
-   - <!DOCTYPE html>
-   - <html lang="en">
+<h1 id="top">HomeWay – Property Services Management Platform</h1>
 
-2) <head>
-   - <meta charset="UTF-8">
-   - <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   - <title>HomeWay README</title>
-   - <style> … </style>
+<p>
+  <strong>HomeWay</strong> is a Spring Boot backend that connects customers with specialized service companies to manage residential properties efficiently.
+  It supports end-to-end service lifecycles for <strong>Inspection</strong>, <strong>Maintenance</strong>, <strong>Moving</strong>, and <strong>Redesign</strong>,
+  enforcing structured workflows, secure access control, transparent pricing, real-time notifications, payment processing, and AI-powered assistance.
+</p>
 
-3) CSS (inside <style>)
-   A) .language-toggle
-      - Fixed position: top-right
-      - z-index: 1000
+<hr />
 
-   B) .language-toggle button
-      - padding, margin
-      - cursor: pointer
-      - border, background
-      - border-radius
-      - font-weight: bold
+<h2>Table of Contents</h2>
+<ul>
+  <li><a href="#introduction">1. Introduction</a></li>
+  <li><a href="#key-features">2. Key Features</a></li>
+  <li><a href="#roles-permissions">3. User Roles &amp; Permissions</a></li>
+  <li><a href="#architecture">4. Architecture</a></li>
+  <li><a href="#core-workflows">5. Core Workflows</a></li>
+  <li><a href="#problems-solved">6. Problems Solved</a></li>
+  <li><a href="#contributing">7. Contributing</a></li>
+  <li><a href="#contributors">8. Contributors</a></li>
+</ul>
 
-   C) .language-toggle button.active
-      - active button colors (dark background, white text)
+<hr />
 
-   D) .lang-content
-      - display: none
+<h2 id="introduction">1. Introduction</h2>
+<p>
+  HomeWay is designed as a realistic, production-style backend system. It integrates business rules, role-based authorization,
+  payment verification, notifications, reporting, and subscription-gated AI features to enhance decision-making for customers
+  and service providers.
+</p>
+<p>
+  The platform centers around a controlled request lifecycle:
+  <strong>Pending → Approved → In Progress → Completed</strong> (or <strong>Rejected</strong>),
+  with strict validation of role permissions, ownership, and state transitions.
+</p>
+<p><a href="#top">↑ Back to top</a></p>
 
-   E) .lang-content.active
-      - display: block
+<hr />
 
-   F) .rtl
-      - direction: rtl
-      - text-align: right
+<h2 id="key-features">2. Key Features</h2>
 
-────────────────────────────────────────────────────────────
-4) <body>
-────────────────────────────────────────────────────────────
+<h3>Property Management</h3>
+<ul>
+  <li>Customers can create, update, and manage multiple properties.</li>
+  <li>All service requests are tied to a specific property for traceability.</li>
+</ul>
 
-4.1) Language Toggle UI
-   - <div class="language-toggle">
-       - English button
-         id="btn-en"
-         class="active"
-         onclick="switchLanguage('en')"
-       - Arabic button
-         id="btn-ar"
-         onclick="switchLanguage('ar')"
-     </div>
+<h3>Service Request Lifecycle</h3>
+<ul>
+  <li>Controlled flow: <strong>Pending → Approved → In Progress → Completed</strong> (or <strong>Rejected</strong>).</li>
+  <li>Requests are explicitly linked to a company and a property.</li>
+  <li>Strict validation of request state transitions and ownership checks.</li>
+</ul>
 
-────────────────────────────────────────────────────────────
-5) English Content Section (content-en)
-────────────────────────────────────────────────────────────
-Container:
-- <div id="content-en" class="lang-content active">
+<h3>Offer &amp; Payment System</h3>
+<ul>
+  <li>Companies approve requests by creating a pricing offer.</li>
+  <li>Customers can accept or reject offers before payment.</li>
+  <li>Secure payment processing via <strong>Moyasar</strong> with verification and automatic request payment updates.</li>
+</ul>
 
-Content:
-5.1) Title + Intro
-   - <h1 id="top">HomeWay – Property Services Management Platform</h1>
-   - Intro paragraph describing the platform
-   - <hr />
+<h3>Resource Management</h3>
+<ul>
+  <li>Automatic assignment of available workers for requests.</li>
+  <li>Vehicle assignment for moving services.</li>
+  <li>Availability tracking to prevent double-booking and conflicts.</li>
+</ul>
 
-5.2) Table of Contents
-   - <h2>Table of Contents</h2>
-   - Links:
-     - #introduction
-     - #key-features
-     - #roles-permissions
-     - #architecture
-     - #core-workflows
-     - #problems-solved
-     - #contributing
-     - #contributors
-   - <hr />
+<h3>Reports &amp; Reviews</h3>
+<ul>
+  <li>Workers generate structured reports after request completion.</li>
+  <li>Customers can view reports for their own requests.</li>
+  <li>Customers can submit reviews (one per completed request) to support service transparency.</li>
+</ul>
 
-5.3) Section 1: Introduction
-   - <h2 id="introduction">1. Introduction</h2>
-   - Paragraphs explaining:
-     - production-style backend system
-     - business rules + RBAC + payments + notifications + reporting + subscription-gated AI
-     - controlled request lifecycle:
-       Pending → Approved → In Progress → Completed (or Rejected)
-   - Back to top link
-   - <hr />
+<h3>Notification System</h3>
+<ul>
+  <li>Notifications created for critical events (approval, rejection, start, completion, review creation, etc.).</li>
+  <li>Supports customer, company, and worker notification flows.</li>
+</ul>
 
-5.4) Section 2: Key Features
-   - <h2 id="key-features">2. Key Features</h2>
+<h3>AI-Powered Assistance (Subscription Based)</h3>
+<ul>
+  <li>Cost estimation and breakdowns (customer/company perspective).</li>
+  <li>Timeline estimation and planning guidance.</li>
+  <li>Issue diagnosis (text &amp; image URL input).</li>
+  <li>Inspection planning checklists and prioritization.</li>
+  <li>Worker safety requirements and repair checklists.</li>
+  <li>Redesign scope &amp; style suggestions.</li>
+</ul>
 
-   5.4.1) Property Management
-          - Customers manage multiple properties
-          - Requests tied to property
+<h3>Subscription &amp; Billing</h3>
+<ul>
+  <li><strong>FREE</strong> and <strong>AI</strong> plans.</li>
+  <li>AI features available only for active subscriptions.</li>
+  <li>Scheduled email reminders for renewal and expiry.</li>
+</ul>
 
-   5.4.2) Service Request Lifecycle
-          - Controlled flow + strict validation
+<p><a href="#top">↑ Back to top</a></p>
 
-   5.4.3) Offer & Payment System
-          - Offers, accept/reject
-          - Moyasar payment + verification + auto updates
+<hr />
 
-   5.4.4) Resource Management
-          - Worker assignment
-          - Vehicle assignment (moving)
-          - Availability tracking
+<h2 id="roles-permissions">3. User Roles &amp; Permissions</h2>
 
-   5.4.5) Reports & Reviews
-          - Worker reports
-          - Customer views reports
-          - One review per completed request
+<h3>Customer</h3>
+<ul>
+  <li>Manage profile and properties.</li>
+  <li>Create service requests (inspection, moving, maintenance, redesign).</li>
+  <li>View/manage own requests and offers.</li>
+  <li>Accept/reject offers and pay for services.</li>
+  <li>View reports and submit reviews after completion.</li>
+  <li>Use AI features if subscribed.</li>
+</ul>
 
-   5.4.6) Notification System
-          - Critical event notifications
-          - Customer/company/worker flows
+<h3>Company (Role-specialized)</h3>
+<p>
+  Company accounts are specialized by role:
+  <strong>INSPECTION_COMPANY</strong>, <strong>MOVING_COMPANY</strong>, <strong>MAINTENANCE_COMPANY</strong>, <strong>REDESIGN_COMPANY</strong>.
+</p>
+<ul>
+  <li>Requires admin approval to operate.</li>
+  <li>View assigned requests.</li>
+  <li>Approve/reject pending requests and create pricing offers.</li>
+  <li>Start requests only after validating: offer accepted + request paid + correct state.</li>
+  <li>Assign/release resources (workers; vehicles for moving).</li>
+  <li>View reviews and notifications related to company operations.</li>
+</ul>
 
-   5.4.7) AI-Powered Assistance (Subscription Based)
-          - Cost estimation
-          - Timeline guidance
-          - Issue diagnosis (text/image URL)
-          - Inspection planning
-          - Safety requirements + repair checklist
-          - Redesign suggestions
+<h3>Worker</h3>
+<ul>
+  <li>Works under a company and is assigned to requests.</li>
+  <li>Can access only requests assigned to them.</li>
+  <li>Create/update/delete reports (after request completion).</li>
+  <li>AI tools available only if: subscription is active + worker account is active.</li>
+</ul>
 
-   5.4.8) Subscription & Billing
-          - FREE and AI plans
-          - AI gated by active subscription
-          - Scheduled renewal/expiry emails
+<h3>Admin</h3>
+<ul>
+  <li>Approve/reject company registrations.</li>
+  <li>Oversee platform data, users, and notifications.</li>
+  <li>Manage platform-level operations and governance flows.</li>
+</ul>
 
-   - Back to top link
-   - <hr />
+<p><a href="#top">↑ Back to top</a></p>
 
-5.5) Section 3: User Roles & Permissions
-   - <h2 id="roles-permissions">3. User Roles & Permissions</h2>
+<hr />
 
-   5.5.1) Customer
-          - Profile + properties
-          - Create requests
-          - Manage requests/offers
-          - Pay
-          - Reports + reviews
-          - AI if subscribed
+<h2 id="architecture">4. Architecture</h2>
+<p>
+  HomeWay follows a layered Spring Boot architecture to keep responsibilities clean and scalable:
+</p>
 
-   5.5.2) Company (Role-specialized)
-          - Roles: INSPECTION_COMPANY, MOVING_COMPANY, MAINTENANCE_COMPANY, REDESIGN_COMPANY
-          - Admin approval required
-          - Approve/reject requests + create offers
-          - Start only if offer accepted + paid + correct state
-          - Assign/release resources
-          - View reviews + notifications
+<h3>Controller Layer</h3>
+<ul>
+  <li>RESTful APIs for customers, companies, workers, and admin.</li>
+  <li>Authentication via Spring Security (Basic Auth) and <code>@AuthenticationPrincipal</code>.</li>
+</ul>
 
-   5.5.3) Worker
-          - Assigned to requests
-          - Only assigned requests accessible
-          - Report CRUD after completion
-          - AI only if subscription active + worker active
+<h3>Service Layer</h3>
+<ul>
+  <li>Business logic + workflow enforcement (state transitions, ownership checks, role gating).</li>
+  <li>Transactional operations for request lifecycle, resource assignment, and payment confirmation.</li>
+  <li>Subscription checks that gate AI features.</li>
+</ul>
 
-   5.5.4) Admin
-          - Approve/reject company registrations
-          - Oversees platform users/data/notifications
-          - Platform governance
+<h3>Persistence Layer</h3>
+<ul>
+  <li>JPA/Hibernate relational mapping.</li>
+  <li>Strong entity ownership via <code>@OneToOne</code>, <code>@ManyToOne</code>, and <code>@MapsId</code>.</li>
+</ul>
 
-   - Back to top link
-   - <hr />
+<h3>External Integrations</h3>
+<ul>
+  <li><strong>Moyasar</strong> for payments (offers + subscription billing).</li>
+  <li><strong>OpenAI API</strong> for AI assistance endpoints.</li>
+  <li>Email service for renewal/expiry notifications.</li>
+</ul>
 
-5.6) Section 4: Architecture
-   - <h2 id="architecture">4. Architecture</h2>
-   - Layered Spring Boot architecture
+<p><a href="#top">↑ Back to top</a></p>
 
-   5.6.1) Controller Layer
-          - REST APIs
-          - Spring Security Basic Auth + @AuthenticationPrincipal
+<hr />
 
-   5.6.2) Service Layer
-          - Business logic + workflow enforcement
-          - Transactions
-          - Subscription checks for AI
+<h2 id="core-workflows">5. Core Workflows</h2>
 
-   5.6.3) Persistence Layer
-          - JPA/Hibernate
-          - Ownership via @OneToOne / @ManyToOne / @MapsId
+<h3>Service Request Flow</h3>
+<ol>
+  <li>Customer selects a property and a company, then creates a request (<strong>Pending</strong>).</li>
+  <li>Company reviews the request:
+    <ul>
+      <li><strong>Approve</strong>: creates an offer with a price → request becomes <strong>Approved</strong>.</li>
+      <li><strong>Reject</strong>: request becomes <strong>Rejected</strong>.</li>
+    </ul>
+  </li>
+  <li>Customer accepts the offer and completes payment (gates service execution).</li>
+  <li>Company starts the request:
+    <ul>
+      <li>Validates offer is accepted + request is paid + correct status.</li>
+      <li>Assigns an available worker (and a vehicle for moving requests).</li>
+      <li>Updates availability and marks request <strong>In Progress</strong>.</li>
+    </ul>
+  </li>
+  <li>Company completes the request:
+    <ul>
+      <li>Releases worker/vehicle resources and restores availability.</li>
+      <li>Marks request <strong>Completed</strong> and stores completion dates.</li>
+    </ul>
+  </li>
+  <li>Notifications are created at key steps for customer/company/worker visibility.</li>
+</ol>
 
-   5.6.4) External Integrations
-          - Moyasar (offers + subscriptions)
-          - OpenAI API
-          - Email for renewal/expiry notifications
+<h3>Payment Flow</h3>
+<ol>
+  <li>Customer pays an accepted offer via Moyasar.</li>
+  <li>System verifies payment status using Moyasar APIs.</li>
+  <li>Request <code>isPaid</code> is updated automatically upon successful verification.</li>
+  <li>Request execution (start/complete) is blocked unless paid.</li>
+</ol>
 
-   - Back to top link
-   - <hr />
+<h3>AI Feature Flow</h3>
+<ol>
+  <li>User subscribes to AI plan (subscription stored and payment tracked).</li>
+  <li>Every AI endpoint validates subscription status before responding.</li>
+  <li>Additional gating rules apply depending on endpoint:
+    <ul>
+      <li>Worker must be active for worker tools.</li>
+      <li>Company role must match feature type (e.g., moving tools for moving company).</li>
+    </ul>
+  </li>
+  <li>AI responses are returned in structured, actionable formats.</li>
+</ol>
 
-5.7) Section 5: Core Workflows
-   - <h2 id="core-workflows">5. Core Workflows</h2>
+<p><a href="#top">↑ Back to top</a></p>
 
-   5.7.1) Service Request Flow
-          - Customer creates Pending request
-          - Company approves (offer) or rejects
-          - Customer accepts offer + pays
-          - Company starts: validates paid + accepted + correct status, assigns worker/vehicle, sets In Progress
-          - Company completes: releases resources, sets Completed
-          - Notifications at key steps
+<hr />
 
-   5.7.2) Payment Flow
-          - Customer pays via Moyasar
-          - System verifies
-          - isPaid updated automatically
-          - Execution blocked unless paid
+<h2 id="problems-solved">6. Problems Solved</h2>
+<ul>
+  <li><strong>Unstructured service requests:</strong> Enforces a controlled lifecycle and valid state transitions.</li>
+  <li><strong>Pricing ambiguity:</strong> Uses explicit offers + acceptance before payment.</li>
+  <li><strong>Resource conflicts:</strong> Prevents double-assignment of workers/vehicles with availability tracking.</li>
+  <li><strong>Unauthorized access:</strong> Strong role-based and ownership validation for sensitive operations.</li>
+  <li><strong>Poor communication:</strong> Built-in notifications for all critical service events.</li>
+  <li><strong>Lack of decision support:</strong> AI tools assist planning, estimation, diagnosis, and documentation.</li>
+  <li><strong>Scalability:</strong> Modular structure supports adding service types and AI tools without redesign.</li>
+</ul>
 
-   5.7.3) AI Feature Flow
-          - Subscribe
-          - Validate before each AI call
-          - Extra gating rules:
-            - worker must be active for worker tools
-            - company role must match AI feature type
-          - Structured actionable outputs
+<p><a href="#top">↑ Back to top</a></p>
 
-   - Back to top link
-   - <hr />
+<hr />
 
-5.8) Section 6: Problems Solved
-   - <h2 id="problems-solved">6. Problems Solved</h2>
-   - Unstructured requests → controlled lifecycle
-   - Pricing ambiguity → offers + acceptance before payment
-   - Resource conflicts → availability tracking
-   - Unauthorized access → RBAC + ownership checks
-   - Poor communication → notifications
-   - Lack of decision support → AI tools
-   - Scalability → modular structure
+<h2 id="contributing">7. Contributing</h2>
+<p>
+  This project was developed as a collaborative capstone project. The current version represents a complete implementation 
+  of the HomeWay platform with all planned features and workflows.
+</p>
+<p>
+  While this repository showcases our final work, we welcome feedback, suggestions, and discussions about the 
+  implementation. If you're interested in learning more about specific features or have questions about our approach:
+</p>
+<ul>
+  <li>Open an issue to discuss potential improvements or ask questions about the architecture.</li>
+  <li>Review our comprehensive documentation to understand the design decisions and workflows.</li>
+  <li>Check out the Postman documentation and test cases to explore the API endpoints.</li>
+</ul>
+<p>
+  If you'd like to build upon this work or adapt it for your own use case, feel free to fork the repository. 
+  Please ensure you maintain the existing structure (Controller → Service → Repository) and preserve validation 
+  and authorization rules when making modifications.
+</p>
 
-   - Back to top link
-   - <hr />
+<p><a href="#top">↑ Back to top</a></p>
 
-5.9) Section 7: Contributing
-   - <h2 id="contributing">7. Contributing</h2>
-   - Explains this is a collaborative capstone with complete feature implementation
-   - Welcomes feedback/discussions
-   - Suggests:
-     - open issues
-     - review documentation
-     - explore Postman docs and tests
-   - Forking guidance + keep structure + preserve validation/auth rules
+<hr />
 
-   - Back to top link
-   - <hr />
+<h2 id="contributors">8. Contributors</h2>
 
-5.10) Section 8: Contributors
-   - <h2 id="contributors">8. Contributors</h2>
+<h3><a href="https://github.com/Turki1927">@Turki1927</a></h3>
+<p><strong>Backend Development:</strong></p>
+<ul>
+  <li>Property, Worker, Admin entities</li>
+  <li>Notifications system</li>
+  <li>SubscriptionPaymentService, UserSubscriptionService</li>
+  <li>Request flows: Maintenance &amp; Redesign</li>
+</ul>
+<p><strong>Testing &amp; Design:</strong></p>
+<ul>
+  <li>JUnit Test (Service layer)</li>
+  <li>Postman Testing (Local/deployment)</li>
+  <li>Figma Initial Design</li>
+  <li>Class Diagram</li>
+</ul>
+<p><strong>External APIs:</strong></p>
+<ul>
+  <li>Subscription payment integration (Moyasar)</li>
+  <li>Email Integration (Subscription/Notifications)</li>
+  <li>AI endpoints: customerServicesTimeEstimation, customerReviewWritingAssist, workerRepairChecklist, workerSafetyRequirements, companyServiceEstimationCost, maintenanceCompanySparePartsCosts</li>
+</ul>
 
-   Contributor 1: @Turki1927
-   - Backend:
-     - Property, Worker, Admin entities
-     - Notifications system
-     - SubscriptionPaymentService, UserSubscriptionService
-     - Maintenance & Redesign request flows
-   - Testing & Design:
-     - JUnit (Service layer)
-     - Postman testing
-     - Figma initial design
-     - Class diagram
-   - External APIs:
-     - Moyasar subscription payment
-     - Email (subscription/notifications)
-     - AI endpoints list
+<h3><a href="https://github.com/leenref">@leenref</a></h3>
+<p><strong>Backend Development:</strong></p>
+<ul>
+  <li>Report, Vehicle, Customer entities</li>
+  <li>RequestPaymentService</li>
+  <li>Request flow: Moving</li>
+</ul>
+<p><strong>Testing &amp; Documentation:</strong></p>
+<ul>
+  <li>JUnit Test (Controller layer)</li>
+  <li>Postman Testing (Local/deployment)</li>
+  <li>Postman Documentation</li>
+  <li>Figma Initial Design</li>
+  <li>Class Diagram</li>
+</ul>
+<p><strong>Deployment &amp; External APIs:</strong></p>
+<ul>
+  <li>Platform Deployment</li>
+  <li>Service payment integration (Moyasar)</li>
+  <li>AI endpoints: customerAskAIWhatServiceDoesTheIssueFits, customerIsFixOrDesignCheaper, workerReportCreationAssistant, companyInspectionPlanningAssistant, movingCompanyTimeAdvice, maintenanceFixOrReplace</li>
+</ul>
 
-   Contributor 2: @leenref
-   - Backend:
-     - Report, Vehicle, Customer entities
-     - RequestPaymentService
-     - Moving flow
-   - Testing & Documentation:
-     - JUnit (Controller)
-     - Postman testing
-     - Postman documentation
-     - Figma initial design
-     - Class diagram
-   - Deployment & External APIs:
-     - Deployment
-     - Moyasar service payment
-     - AI endpoints list
+<h3><a href="https://github.com/OsamaAlahmadi-90">@OsamaAlahmadi-90</a></h3>
+<p><strong>Backend Development:</strong></p>
+<ul>
+  <li>User, Offer, UserRegister, Review, Company entities</li>
+  <li>Request flow: Inspection</li>
+</ul>
+<p><strong>Testing &amp; Design:</strong></p>
+<ul>
+  <li>JUnit Test (Repository layer)</li>
+  <li>Postman Testing (Local/deployment)</li>
+  <li>Figma Final Design</li>
+  <li>Class Diagram</li>
+  <li>Use Case Diagram</li>
+  <li>Project Presentation</li>
+</ul>
+<p><strong>External APIs:</strong></p>
+<ul>
+  <li>Email integration (Company/Customer Requests)</li>
+  <li>AI endpoints: customerRequestCostEstimation, customerReportSummary, workerIssueDiagnosis, movingCompanyResourceMovingEstimation, workerJobTimeEstimation, maintenanceCompanyMaintenancePlan, redesignCompanyRedesignScope, customerRedesignFromImage, companyIssueImageDiagnosis</li>
+</ul>
 
-   Contributor 3: @OsamaAlahmadi-90
-   - Backend:
-     - User, Offer, UserRegister, Review, Company entities
-     - Inspection flow
-   - Testing & Design:
-     - JUnit (Repository)
-     - Postman testing
-     - Figma final design
-     - Class diagram
-     - Use case diagram
-     - Presentation
-   - External APIs:
-     - Email integration (company/customer requests)
-     - AI endpoints list
+<p><a href="#top">↑ Back to top</a></p>
 
-   - Back to top link
+</div>
 
-Close English section:
-- </div>
+<!-- Arabic Content -->
+<div id="content-ar" class="lang-content rtl">
 
-────────────────────────────────────────────────────────────
-6) Arabic Content Section (content-ar) + RTL
-────────────────────────────────────────────────────────────
-Container:
-- <div id="content-ar" class="lang-content rtl">
+<h1 id="top-ar">HomeWay – منصة إدارة خدمات الممتلكات</h1>
 
-Content mirrors the English structure (translated to Arabic):
-6.1) Arabic title + intro
-6.2) Arabic table of contents with Arabic anchors:
-   - #introduction-ar
-   - #key-features-ar
-   - #roles-permissions-ar
-   - #architecture-ar
-   - #core-workflows-ar
-   - #problems-solved-ar
-   - #contributing-ar
-   - #contributors-ar
+<p>
+  <strong>HomeWay</strong> هي منصة خلفية مبنية بـ Spring Boot تربط العملاء بشركات الخدمات المتخصصة لإدارة العقارات السكنية بكفاءة.
+  تدعم دورة حياة الخدمة الكاملة لـ <strong>الفحص</strong>، <strong>الصيانة</strong>، <strong>النقل</strong>، و<strong>إعادة التصميم</strong>،
+  مع تطبيق سير عمل منظم، والتحكم الآمن في الوصول، والتسعير الشفاف، والإشعارات الفورية، ومعالجة المدفوعات، والمساعدة المدعومة بالذكاء الاصطناعي.
+</p>
 
-6.3) Sections 1–8 in Arabic:
-   - Introduction
-   - Key Features
-   - Roles & Permissions
-   - Architecture
-   - Core Workflows
-   - Problems Solved
-   - Contributing
-   - Contributors (same contributors, Arabic descriptions)
+<hr />
 
-Close Arabic section:
-- </div>
+<h2>جدول المحتويات</h2>
+<ul>
+  <li><a href="#introduction-ar">1. المقدمة</a></li>
+  <li><a href="#key-features-ar">2. الميزات الرئيسية</a></li>
+  <li><a href="#roles-permissions-ar">3. أدوار المستخدمين والصلاحيات</a></li>
+  <li><a href="#architecture-ar">4. البنية المعمارية</a></li>
+  <li><a href="#core-workflows-ar">5. سير العمل الأساسي</a></li>
+  <li><a href="#problems-solved-ar">6. المشاكل التي تم حلها</a></li>
+  <li><a href="#contributing-ar">7. المساهمة</a></li>
+  <li><a href="#contributors-ar">8. المساهمون</a></li>
+</ul>
 
-────────────────────────────────────────────────────────────
-7) JavaScript Logic
-────────────────────────────────────────────────────────────
-- <script>
-  function switchLanguage(lang) {
-    1) Remove 'active' from content-en and content-ar
-    2) Remove 'active' from btn-en and btn-ar
-    3) If lang == 'en':
-         add 'active' to content-en and btn-en
-       else:
-         add 'active' to content-ar and btn-ar
-  }
-  </script>
+<hr />
 
-────────────────────────────────────────────────────────────
-8) Closing Tags
-────────────────────────────────────────────────────────────
-- </body>
-- </html>
+<h2 id="introduction-ar">1. المقدمة</h2>
+<p>
+  تم تصميم HomeWay كنظام خلفي واقعي على مستوى الإنتاج. يدمج قواعد العمل، والترخيص القائم على الأدوار،
+  والتحقق من الدفع، والإشعارات، والتقارير، وميزات الذكاء الاصطناعي المقيدة بالاشتراك لتحسين اتخاذ القرار للعملاء
+  ومقدمي الخدمات.
+</p>
+<p>
+  تتمحور المنصة حول دورة حياة طلب خدمة محكومة:
+  <strong>قيد الانتظار ← موافق عليه ← قيد التنفيذ ← مكتمل</strong> (أو <strong>مرفوض</strong>)،
+  مع التحقق الصارم من صلاحيات الأدوار، والملكية، وانتقالات الحالة.
+</p>
+<p><a href="#top-ar">↑ العودة للأعلى</a></p>
+
+<hr />
+
+<h2 id="key-features-ar">2. الميزات الرئيسية</h2>
+
+<h3>إدارة الممتلكات</h3>
+<ul>
+  <li>يمكن للعملاء إنشاء وتحديث وإدارة عدة عقارات.</li>
+  <li>جميع طلبات الخدمة مرتبطة بعقار محدد لتتبع أفضل.</li>
+</ul>
+
+<h3>دورة حياة طلب الخدمة</h3>
+<ul>
+  <li>سير عمل محكوم: <strong>قيد الانتظار ← موافق عليه ← قيد التنفيذ ← مكتمل</strong> (أو <strong>مرفوض</strong>).</li>
+  <li>الطلبات مرتبطة صراحةً بشركة وعقار.</li>
+  <li>التحقق الصارم من انتقالات حالة الطلب وفحوصات الملكية.</li>
+</ul>
+
+<h3>نظام العروض والدفع</h3>
+<ul>
+  <li>الشركات توافق على الطلبات من خلال إنشاء عرض سعر.</li>
+  <li>العملاء يمكنهم قبول أو رفض العروض قبل الدفع.</li>
+  <li>معالجة دفع آمنة عبر <strong>ميسر (Moyasar)</strong> مع التحقق والتحديث التلقائي لحالة الدفع.</li>
+</ul>
+
+<h3>إدارة الموارد</h3>
+<ul>
+  <li>تعيين تلقائي للعمال المتاحين للطلبات.</li>
+  <li>تعيين المركبات لخدمات النقل.</li>
+  <li>تتبع التوافر لمنع الحجوزات المزدوجة والتعارضات.</li>
+</ul>
+
+<h3>التقارير والمراجعات</h3>
+<ul>
+  <li>العمال ينشئون تقارير منظمة بعد إكمال الطلب.</li>
+  <li>العملاء يمكنهم عرض التقارير لطلباتهم الخاصة.</li>
+  <li>العملاء يمكنهم تقديم مراجعات (مراجعة واحدة لكل طلب مكتمل) لدعم الشفافية.</li>
+</ul>
+
+<h3>نظام الإشعارات</h3>
+<ul>
+  <li>إنشاء إشعارات للأحداث الحرجة (الموافقة، الرفض، البدء، الإكمال، إنشاء المراجعة، إلخ).</li>
+  <li>يدعم تدفقات الإشعارات للعملاء والشركات والعمال.</li>
+</ul>
+
+<h3>المساعدة المدعومة بالذكاء الاصطناعي (على أساس الاشتراك)</h3>
+<ul>
+  <li>تقدير التكلفة والتفاصيل (من منظور العميل/الشركة).</li>
+  <li>تقدير الجدول الزمني وإرشادات التخطيط.</li>
+  <li>تشخيص المشاكل (نص ورابط صورة).</li>
+  <li>قوائم مراجعة تخطيط الفحص وتحديد الأولويات.</li>
+  <li>متطلبات السلامة للعمال وقوائم مراجعة الإصلاح.</li>
+  <li>نطاق إعادة التصميم واقتراحات الأسلوب.</li>
+</ul>
+
+<h3>الاشتراك والفوترة</h3>
+<ul>
+  <li>خطط <strong>مجانية</strong> و<strong>الذكاء الاصطناعي</strong>.</li>
+  <li>ميزات الذكاء الاصطناعي متاحة فقط للاشتراكات النشطة.</li>
+  <li>تذكيرات مجدولة عبر البريد الإلكتروني للتجديد والانتهاء.</li>
+</ul>
+
+<p><a href="#top-ar">↑ العودة للأعلى</a></p>
+
+<hr />
+
+<h2 id="roles-permissions-ar">3. أدوار المستخدمين والصلاحيات</h2>
+
+<h3>العميل</h3>
+<ul>
+  <li>إدارة الملف الشخصي والعقارات.</li>
+  <li>إنشاء طلبات الخدمة (فحص، نقل، صيانة، إعادة تصميم).</li>
+  <li>عرض/إدارة الطلبات والعروض الخاصة.</li>
+  <li>قبول/رفض العروض والدفع مقابل الخدمات.</li>
+  <li>عرض التقارير وتقديم المراجعات بعد الإكمال.</li>
+  <li>استخدام ميزات الذكاء الاصطناعي إذا كان مشتركًا.</li>
+</ul>
+
+<h3>الشركة (متخصصة حسب الدور)</h3>
+<p>
+  حسابات الشركات متخصصة حسب الدور:
+  <strong>شركة فحص</strong>، <strong>شركة نقل</strong>، <strong>شركة صيانة</strong>، <strong>شركة إعادة تصميم</strong>.
+</p>
+<ul>
+  <li>تتطلب موافقة المسؤول للعمل.</li>
+  <li>عرض الطلبات المخصصة.</li>
+  <li>الموافقة/رفض الطلبات المعلقة وإنشاء عروض الأسعار.</li>
+  <li>بدء الطلبات فقط بعد التحقق من: قبول العرض + دفع الطلب + الحالة الصحيحة.</li>
+  <li>تعيين/إطلاق الموارد (العمال؛ المركبات للنقل).</li>
+  <li>عرض المراجعات والإشعارات المتعلقة بعمليات الشركة.</li>
+</ul>
+
+<h3>العامل</h3>
+<ul>
+  <li>يعمل تحت شركة ويُعين للطلبات.</li>
+  <li>يمكنه الوصول فقط للطلبات المعينة له.</li>
+  <li>إنشاء/تحديث/حذف التقارير (بعد إكمال الطلب).</li>
+  <li>أدوات الذكاء الاصطناعي متاحة فقط إذا: الاشتراك نشط + حساب العامل نشط.</li>
+</ul>
+
+<h3>المسؤول</h3>
+<ul>
+  <li>الموافقة/رفض تسجيلات الشركات
