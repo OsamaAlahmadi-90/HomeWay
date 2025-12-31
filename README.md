@@ -384,7 +384,7 @@
   <li><a href="#architecture-ar">4. بينة المشروع</a></li>
   <li><a href="#core-workflows-ar">5. سير العمل الأساسي</a></li>
   <li><a href="#problems-solved-ar">6. المشاكل التي تم حلها</a></li>
-  li><a href="#Important-URLs">8. روابط مهمة</a></li>
+  <li><a href="#Important-URLs">8. روابط مهمة</a></li>
 </ul>
 
 <hr />
