@@ -325,7 +325,7 @@
 
 <h2 id="Important-URLs">8. Important URLs</h2>
 <ul>
-  <li><strong>Class Diagram <a href="[https://github.com/leenref](https://lucid.app/lucidchart/47e4b69c-9bff-418c-ad03-7ed25d25c199/edit?viewport_loc=-1816%2C-1410%2C4462%2C2187%2C0_0&invitationId=inv_36319b19-7def-45b6-a86b-72934fe0c837)"></a>: </li>
+  <li><strong>Class Diagram: href="[https://github.com/leenref](https://lucid.app/lucidchart/47e4b69c-9bff-418c-ad03-7ed25d25c199/edit?viewport_loc=-1816%2C-1410%2C4462%2C2187%2C0_0&invitationId=inv_36319b19-7def-45b6-a86b-72934fe0c837 </li>
   <li><strong>Pricing ambiguity:</strong> Uses explicit offers + acceptance before payment.</li>
   <li><strong>Resource conflicts:</strong> Prevents double-assignment of workers/vehicles with availability tracking.</li>
   <li><strong>Unauthorized access:</strong> Strong role-based and ownership validation for sensitive operations.</li>
