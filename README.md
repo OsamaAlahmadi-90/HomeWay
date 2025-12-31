@@ -253,32 +253,6 @@
 
 <p><a href="#top">↑ Back to top</a></p>
 
-<hr />
-
-<h2 id="contributing">7. Contributing</h2>
-<p>
-  This project was developed as a collaborative capstone project. The current version represents a complete implementation 
-  of the HomeWay platform with all planned features and workflows.
-</p>
-<p>
-  While this repository showcases our final work, we welcome feedback, suggestions, and discussions about the 
-  implementation. If you're interested in learning more about specific features or have questions about our approach:
-</p>
-<ul>
-  <li>Open an issue to discuss potential improvements or ask questions about the architecture.</li>
-  <li>Review our comprehensive documentation to understand the design decisions and workflows.</li>
-  <li>Check out the Postman documentation and test cases to explore the API endpoints.</li>
-</ul>
-<p>
-  If you'd like to build upon this work or adapt it for your own use case, feel free to fork the repository. 
-  Please ensure you maintain the existing structure (Controller → Service → Repository) and preserve validation 
-  and authorization rules when making modifications.
-</p>
-
-<p><a href="#top">↑ Back to top</a></p>
-
-<hr />
-
 <h2 id="contributors">8. Contributors</h2>
 
 <h3><a href="https://github.com/Turki1927">@Turki1927</a></h3>
@@ -601,32 +575,6 @@
 </ul>
 
 <p><a href="#top-ar">↑ العودة للأعلى</a></p>
-
-<hr />
-
-<h2 id="contributing-ar">7. المساهمة</h2>
-<p>
-  تم تطوير هذا المشروع كمشروع تخرج تعاوني. النسخة الحالية تمثل تنفيذًا كاملاً لمنصة HomeWay
-  مع جميع الميزات وسير العمل المخطط لها.
-</p>
-<p>
-  بينما يعرض هذا المستودع عملنا النهائي، نرحب بالملاحظات والاقتراحات والنقاشات حول التنفيذ.
-  إذا كنت ترغب في معرفة المزيد عن ميزة معينة أو لديك أسئلة حول نهجنا:
-</p>
-<ul>
-  <li>افتح Issue لمناقشة التحسينات المحتملة أو لطرح أسئلة عن البنية المعمارية.</li>
-  <li>راجع وثائقنا الشاملة لفهم قرارات التصميم وسير العمل.</li>
-  <li>اطّلع على وثائق Postman وحالات الاختبار لاستكشاف نقاط النهاية.</li>
-</ul>
-<p>
-  إذا رغبت بالبناء على هذا العمل أو تكييفه لحالة استخدام خاصة بك، يمكنك عمل Fork للمستودع.
-  يرجى الحفاظ على البنية الحالية (Controller → Service → Repository) والالتزام بقواعد التحقق
-  والترخيص عند إجراء أي تعديلات.
-</p>
-
-<p><a href="#top-ar">↑ العودة للأعلى</a></p>
-
-<hr />
 
 <h2 id="contributors-ar">8. المساهمون</h2>
 
